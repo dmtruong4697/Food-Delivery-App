@@ -2,11 +2,14 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import WelcomeScreen from '../screens/welcome/WelcomeScreen';
-import SignInScreen from '../screens/auth/SignInScreen';
-import HomeScreen from '../screens/home/HomeScreen';
-import MyCardScreen from '../screens/cart/MyCardScreen';
-import SearchScreen from '../screens/search/SearchScreen';
+import WelcomeScreen from '../screens/welcomeScreen';
+import SignInScreen from '../screens/signInScreen';
+import HomeScreen from '../screens/homeScreen';
+import CartScreen from '../screens/cartScreen';
+import searchScreen from '../screens/searchScreen';
+import FoodScreen from '../screens/foodScreen';
+import FoodDetailScreen from '../screens/foodDetailScreen';
+import RestaurantDetailScreen from '../screens/restaurantDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,14 +39,35 @@ const MainNavigator = () => {
         />
         <Stack.Screen 
             name="MyCart" 
-            component={MyCardScreen}
+            component={CartScreen}
             options={{
                 headerShown: false,
             }}  
         />
         <Stack.Screen 
             name="Search" 
-            component={SearchScreen}
+            component={searchScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="Food" 
+            component={FoodScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="FoodDetail" 
+            component={FoodDetailScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="RestaurantDetail" 
+            component={RestaurantDetailScreen}
             options={{
                 headerShown: false,
             }}  

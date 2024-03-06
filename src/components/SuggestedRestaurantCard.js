@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 
 const SuggestedRestaurantCard = (props) => {
@@ -6,7 +6,7 @@ const SuggestedRestaurantCard = (props) => {
     const {detail} = props;
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
       
       <View style={styles.imageView}>
         <Image style={styles.imageView} source={detail.imageUri}/>
@@ -19,7 +19,7 @@ const SuggestedRestaurantCard = (props) => {
             <Text style={{fontSize: 16, fontWeight: '400', color: '#181C2E'}}>{detail.rating}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
