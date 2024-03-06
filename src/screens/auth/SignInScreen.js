@@ -46,6 +46,8 @@ const SignInScreen = () => {
             <Text style={styles.inputFieldTitle}>Email address</Text>
             <View style={styles.textInput}>
                 <TextInput 
+                    placeholder='email'
+                    placeholderTextColor={'#939393'}
                     style={{
                         flex: 1,
                         height: '100%',
@@ -62,6 +64,8 @@ const SignInScreen = () => {
             <Text style={styles.inputFieldTitle}>Password</Text>
             <View style={styles.textInput}>
                 <TextInput 
+                    placeholder='password'
+                    placeholderTextColor={'#939393'}
                     secureTextEntry={isShowPassword}
                     style={{
                         flex: 1,
