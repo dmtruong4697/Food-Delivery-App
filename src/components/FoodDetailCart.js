@@ -14,15 +14,15 @@ const FoodDetailCart = (props) => {
     >
         
         <View style={styles.imageView}>
-            <Image style={styles.imageView} source={require('../../assets/food/burger1.png')}/>
+            <Image style={styles.imageView} source={detail.imageUri}/>
         </View>
 
         <View style={styles.contentViewShadow}>
             <View style={styles.contentView}>
-                <Text style={{fontSize: 15, fontWeight: '700', color: '#32343E',}}>Burger Bistro</Text>
-                <Text style={{fontSize: 13, fontWeight: '400', color: '#646982',}}>Rose garden</Text>
+                <Text style={{fontSize: 15, fontWeight: '700', color: '#32343E',}}>{detail.name}</Text>
+                <Text style={{fontSize: 13, fontWeight: '400', color: '#646982',}}>{detail.restaurantName}</Text>
                 <View style={styles.optionView}>
-                    <Text style={{fontSize: 16, fontWeight: '400', color: '#32343E'}}>$75</Text>
+                    <Text style={{fontSize: 16, fontWeight: '400', color: '#32343E'}}>${detail.price}</Text>
                     <TouchableOpacity
                         style={{
                             width: 32, 

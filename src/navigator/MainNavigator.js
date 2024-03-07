@@ -10,6 +10,12 @@ import searchScreen from '../screens/searchScreen';
 import FoodScreen from '../screens/foodScreen';
 import FoodDetailScreen from '../screens/foodDetailScreen';
 import RestaurantDetailScreen from '../screens/restaurantDetailScreen';
+import PaymentScreen from '../screens/paymentScreen';
+import AddCardScreen from '../screens/addCardScreen';
+import PaymentSuccessfullScreen from '../screens/paymentSuccessfull';
+import MyOrderScreen from '../screens/myOrderScreen';
+import TrackerScreen from '../screens/trackerScreen';
+import MenuProfileScreen from '../screens/menuProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +74,48 @@ const MainNavigator = () => {
         <Stack.Screen 
             name="RestaurantDetail" 
             component={RestaurantDetailScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="Payment" 
+            component={PaymentScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="AddCard" 
+            component={AddCardScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="PaymentSuccessfull" 
+            component={PaymentSuccessfullScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="MyOrder" 
+            component={MyOrderScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="Tracker" 
+            component={TrackerScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="MenuProfile" 
+            component={MenuProfileScreen}
             options={{
                 headerShown: false,
             }}  

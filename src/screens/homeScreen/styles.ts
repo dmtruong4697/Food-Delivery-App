@@ -58,4 +58,123 @@ export const styles = StyleSheet.create({
         marginTop: 20,
         
     },
+
+    btnProfile: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 45,
+        width: 45,
+        backgroundColor: '#ECF0F4',
+        borderRadius: 1000,
+    },
+
+    viewTitle: {
+        flex: 1,
+        flexDirection: 'column', 
+        height: '100%',
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
+    },
+
+    btnCart: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 45,
+        width: 45,
+        backgroundColor: '#181C2E',
+        borderRadius: 1000,
+    },
+
+    imgButtonCart: {
+        height: 20, 
+        width: 18,
+    },
+
+    viewInputField: {
+        height: '100%',
+        fontSize: 16,
+        fontWeight: '400',
+        color: '#676767',
+        marginLeft: 5,
+    },
+
+
+    viewCategoriesHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 27,
+        width: '100%',
+        marginBottom: 5,
+    },
+
+    txtCategoriesTitle: {
+        fontSize: 20, 
+        fontWeight: '400', 
+        color: '#32343E', 
+        flex: 1,
+    },
+
+    btnSeeAll: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    txtSeeAll: {
+        fontSize: 16, 
+        fontWeight: '400', 
+        color: '#333333', 
+        marginRight: 5,
+    },
+
+    imgButtonSeeAll: {
+        width: 5, 
+        height: 10,
+    },
+
+    viewModalContainer: {
+        height: 442,
+        width: '95%',
+        alignSelf: 'center',
+        backgroundColor: '#E76F00',
+        borderRadius: 30,
+    },
+
+    btnCloseModal: {
+        width: 48,
+        height: 48,
+        borderRadius: 1000,
+        backgroundColor: '#FFE194',
+        position: 'absolute',
+        top: -24,
+        right: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    txtTitle: {
+        fontSize: 41,
+        fontWeight: '800',
+        color: '#FFFFFF',
+    },
+
+    txtCode: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: '#FFFFFF',
+    },
+
+    txtDescription: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: '#FFFFFF',
+    },
+
+    btnGotIt: {
+        width: '100%',
+        height: 66.19,
+        borderWidth: 2,
+        borderColor: '#FFFFFF',
+        borderRadius: 10,
+    }
 })

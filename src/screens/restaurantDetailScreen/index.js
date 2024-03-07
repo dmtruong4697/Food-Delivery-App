@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { styles } from './styles'
 import FoodDetailCart from '../../components/FoodDetailCart'
 import { useNavigation } from '@react-navigation/native'
+import Modal from "react-native-modal";
 
 const DishTypeData = [
     {
@@ -11,28 +12,28 @@ const DishTypeData = [
         list: [
             {
                 id: 1,
-                imageUri: require('../../../assets/food/burger.png'),
-                name: 'Burger Bistro',
+                imageUri: require('../../../assets/food/burger1.png'),
+                name: 'Burger Bistro nnn',
                 restaurantName: 'Rose Garden',
                 price: '40',
             },
             {
                 id: 2,
-                imageUri: require('../../../assets/food/burger.png'),
+                imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
                 price: '60',
             },
             {
                 id: 3,
-                imageUri: require('../../../assets/food/burger.png'),
+                imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Burger Bistro',
                 restaurantName: 'Rose Garden',
                 price: '40',
             },
             {
                 id: 4    ,
-                imageUri: require('../../../assets/food/burger.png'),
+                imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
                 price: '60',
@@ -52,7 +53,7 @@ const DishTypeData = [
             },
             {
                 id: 2,
-                imageUri: require('../../../assets/food/burger.png'),
+                imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
                 price: '60',
@@ -72,7 +73,7 @@ const DishTypeData = [
             },
             {
                 id: 2,
-                imageUri: require('../../../assets/food/burger.png'),
+                imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
                 price: '60',
@@ -100,10 +101,59 @@ const DishTypeData = [
     },
 ]
 
+const FilterData = [
+    {
+        id: 1,
+        name: 'OFFERS',
+        list: [
+            {
+                id: 1,
+                name: 'Delivery',
+            },
+            {
+                id: 2,
+                name: 'Pick Up',
+            },
+            {
+                id: 3,
+                name: 'Offer',
+            },
+            {
+                id: 4,
+                name: 'Online payment avaiable',
+            },
+        ]
+    },
+
+    {
+        id: 2,
+        name: 'DELIVER TIME',
+        list: [
+            {
+                id: 1,
+                name: 'Delivery',
+            },
+            {
+                id: 2,
+                name: 'Pick Up',
+            },
+            {
+                id: 3,
+                name: 'Offer',
+            },
+            {
+                id: 4,
+                name: 'Online payment avaiable',
+            },
+        ]
+    },
+]
+
 const RestaurantDetailScreen = () => {
 
     const navigation = useNavigation();
     const [dishIndex, setDishIndex] = useState(1);
+    const [isShowModal, setIsShowModal] = useState(false);
     const [layout, setLayout] = useState({
         width: 0,
         height: 0,
@@ -128,6 +178,7 @@ const RestaurantDetailScreen = () => {
 
         <TouchableOpacity
             style={styles.btnOption}
+            onPress={() => {setIsShowModal(true)}}
         >
             <Image style={styles.imgButtonOption} source={require('../../../assets/icon/option.png')}/>
         </TouchableOpacity>
@@ -187,9 +238,10 @@ const RestaurantDetailScreen = () => {
             </View>
 
             <FlatList
-                key={'#'}
-                nestedScrollEnabled
+                // key={dishIndex.toString()}
+                //nestedScrollEnabled
                 data={DishTypeData[dishIndex-1].list}
+                extraData={(dishIndex)}
                 numColumns={2}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
@@ -200,6 +252,25 @@ const RestaurantDetailScreen = () => {
             />
 
         </View>
+
+        <Modal
+            isVisible={isShowModal}
+            style={styles.modalContainer}
+            onBackdropPress={() => {setIsShowModal(false)}}
+            backdropOpacity={0.5}
+            
+        >
+            <View style={styles.viewModalHeader}>
+                <Text style={styles.txtModalHeader}>Filter your search</Text>
+
+                <TouchableOpacity
+                    style={styles.btnClose}
+                    onPress={() => {setIsShowModal(false)}}
+                >
+                    <Image style={styles.imgButtonClose} source={require('../../../assets/icon/cancel.png')}/>
+                </TouchableOpacity>
+            </View>
+        </Modal>
     </ScrollView>
   )
 }

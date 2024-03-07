@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { styles } from './style'
 import { useNavigation } from '@react-navigation/native'
 import Modal from "react-native-modal";
+import Button from '../../components/button';
 
 const sizeData = [
     {
@@ -137,13 +138,7 @@ const FoodDetailScreen = () => {
                 </View>
             </View>
 
-            <View style={styles.viewAddButton}>
-                <TouchableOpacity
-                    style={styles.btnAddButton}
-                >
-                    <Text style={styles.txtAddButton}>ADD TO CART</Text>
-                </TouchableOpacity>
-            </View>
+            <Button content={'ADD TO CART'}/>
         </Modal>
 
     </ScrollView>

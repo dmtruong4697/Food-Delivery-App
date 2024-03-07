@@ -9,24 +9,28 @@ const FoodData = [
     {
         id: 1,
         name: 'Burger Bistro',
+        imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: '40',
     },
     {
         id: 2,
         name: 'Burger Bistro',
+        imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: '40',
     },
     {
         id: 3,
         name: 'Burger Bistro',
+        imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: '40',
     },
     {
         id: 4,
         name: 'Burger Bistro',
+        imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: '40',
     },

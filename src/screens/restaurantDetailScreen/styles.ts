@@ -185,7 +185,45 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
 
+    modalContainer: {
+        width: '90%',
+        marginTop: 50,
+        marginBottom: 50,
+        borderRadius: 10,
+        backgroundColor: '#FFFFFF',
+        padding: 15,
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+        alignItems: 'center',
+        // alignSelf: 'center',
+    },
 
+    viewModalHeader: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    txtModalHeader: {
+        fontSize: 17,
+        fontWeight: '400',
+        color: '#181C2E',
+        flex: 1,
+    },
+
+    imgButtonClose: {
+        height: 10,
+        width: 10,
+    },
+
+    btnClose: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 45,
+        width: 45,
+        backgroundColor: '#ECF0F4',
+        borderRadius: 1000,
+    },
           
 
 })

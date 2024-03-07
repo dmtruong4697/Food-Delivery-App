@@ -1,10 +1,11 @@
 import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import FoodCard from '../../components/FoodCard';
 import ProductItem1 from '../../components/ProductItem1';
 import FastFoodCard from '../../components/FastFoodCard';
 import { styles } from './styles';
+import Modal from "react-native-modal";
 
 const CategoriesData = [
     {
@@ -85,52 +86,35 @@ const PopularFastFoodData = [
 const HomeScreen = () => {
 
     const navigation = useNavigation();
+    const [isShowModal, setIsShowModal] = useState(false);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       
       <View style={styles.headerView}>
         <TouchableOpacity
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 45,
-                width: 45,
-                backgroundColor: '#ECF0F4',
-                borderRadius: 1000,
-            }}
+            style={styles.btnProfile}
+            onPress={() => {navigation.navigate({name: "MenuProfile"})}}
         >
             <Image style={{height: 16, width: 14,}} source={require('../../../assets/icon/menu.png')}/>
         </TouchableOpacity>
 
         <View
-            style={{
-                flex: 1,
-                flexDirection: 'column', 
-                height: '100%',
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingTop: 5,
-            }}
+            style={styles.viewTitle}
         >
             <Text style={{fontSize: 12, fontWeight: '700', color: '#FC6E2A',}}>DELIVER TO</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => {setIsShowModal(true)}}
+            >
                 <Text style={{fontSize: 14, fontWeight: '400', color: '#676767',}}>Los Angeles, USA ▼</Text>
             </TouchableOpacity>
         </View>
 
         <TouchableOpacity
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 45,
-                width: 45,
-                backgroundColor: '#181C2E',
-                borderRadius: 1000,
-            }}
+            style={styles.btnCart}
             onPress={() => {navigation.navigate({name: "MyCart"})}}
         >
-            <Image style={{height: 20, width: 18,}} source={require('../../../assets/icon/cart.png')}/>
+            <Image style={styles.imgButtonCart} source={require('../../../assets/icon/cart.png')}/>
         </TouchableOpacity>
       </View>
 
@@ -149,13 +133,7 @@ const HomeScreen = () => {
         >
             <Image style={{width: 24, height: 24,}} source={require('../../../assets/icon/search.png')}/>
             <TextInput
-                style={{
-                    height: '100%',
-                    fontSize: 16,
-                    fontWeight: '400',
-                    color: '#676767',
-                    marginLeft: 5,
-                }}
+                style={styles.viewInputField}
                 placeholder='What will you like to eat?'
                 readOnly
             />
@@ -164,23 +142,14 @@ const HomeScreen = () => {
 
       <View style={styles.allCategories}>
             <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 27,
-                    width: '100%',
-                    marginBottom: 5,
-                }}
+                style={styles.viewCategoriesHeader}
             >
-                <Text style={{fontSize: 20, fontWeight: '400', color: '#32343E', flex: 1,}}>All Categories</Text>
+                <Text style={styles.txtCategoriesTitle}>All Categories</Text>
                 <TouchableOpacity
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
+                    style={styles.btnSeeAll}
                 >
-                    <Text style={{fontSize: 16, fontWeight: '400', color: '#333333', marginRight: 5,}}>See all</Text>
-                    <Image style={{width: 5, height: 10,}} source={require('../../../assets/icon/arrowRight.png')}/>
+                    <Text style={styles.txtSeeAll}>See all</Text>
+                    <Image style={styles.imgButtonSeeAll} source={require('../../../assets/icon/arrowRight.png')}/>
                 </TouchableOpacity>
             </View>
 
@@ -199,23 +168,14 @@ const HomeScreen = () => {
 
       <View style={styles.openRestaurants}>
             <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 27,
-                    width: '100%',
-                    marginBottom: 5,
-                }}
+                style={styles.viewCategoriesHeader}
             >
-                <Text style={{fontSize: 20, fontWeight: '400', color: '#32343E', flex: 1,}}>Open Restaurants</Text>
+                <Text style={styles.txtCategoriesTitle}>Open Restaurants</Text>
                 <TouchableOpacity
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
+                    style={styles.btnSeeAll}
                 >
-                    <Text style={{fontSize: 16, fontWeight: '400', color: '#333333', marginRight: 5,}}>See all</Text>
-                    <Image style={{width: 5, height: 10,}} source={require('../../../assets/icon/arrowRight.png')}/>
+                    <Text style={styles.txtSeeAll}>See all</Text>
+                    <Image style={styles.imgButtonSeeAll} source={require('../../../assets/icon/arrowRight.png')}/>
                 </TouchableOpacity>
             </View>
 
@@ -234,15 +194,9 @@ const HomeScreen = () => {
 
       <View style={styles.popularFastFood}>
             <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 27,
-                    width: '100%',
-                    marginBottom: 5,
-                }}
+                style={styles.viewCategoriesHeader}
             >
-                <Text style={{fontSize: 20, fontWeight: '400', color: '#32343E', flex: 1,}}>Popular Fast Food</Text>
+                <Text style={styles.txtCategoriesTitle}>Popular Fast Food</Text>
             </View>
 
             <FlatList
@@ -257,6 +211,26 @@ const HomeScreen = () => {
             />
 
       </View>
+
+        <Modal
+            isVisible={isShowModal}
+            style={styles.modalContainer}
+            onBackdropPress={() => {setIsShowModal(false)}}
+            backdropOpacity={0.5}
+            
+        >
+            <View style={styles.viewModalContainer}>
+                <TouchableOpacity
+                    style={styles.btnCloseModal}
+                    onPress={() => {setIsShowModal(false)}}
+                    colors={['#4c669f', '#3b5998', '#192f6a']}
+                >
+                    <Image style={{height: 16, width: 14,}} source={require('../../../assets/icon/close.png')}/>
+                </TouchableOpacity>
+
+                <Text style={styles.txtTitle}>Hurry Offers!</Text>
+            </View>
+        </Modal>
 
 
     </ScrollView>
