@@ -16,6 +16,7 @@ import PaymentSuccessfullScreen from '../screens/paymentSuccessfull';
 import MyOrderScreen from '../screens/myOrderScreen';
 import TrackerScreen from '../screens/trackerScreen';
 import MenuProfileScreen from '../screens/menuProfileScreen';
+import TrackOrderScreen from '../screens/trackOrderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -116,6 +117,13 @@ const MainNavigator = () => {
         <Stack.Screen 
             name="MenuProfile" 
             component={MenuProfileScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="TrackOrder" 
+            component={TrackOrderScreen}
             options={{
                 headerShown: false,
             }}  

@@ -25,7 +25,7 @@ const TrackerScreen: React.FC<IProps> = () => {
       />
 
       <View style={styles.viewFooter}>
-        <Button onPress={() => {console.log('PAY & CONFIRM')}} content={'PAY & CONFIRM'}/>
+        <Button onPress={() => {navigation.navigate('TrackOrder')}} content={'TRACK YOUR ORDER'}/>
       </View>
 
     </View>
