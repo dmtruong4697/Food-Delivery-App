@@ -1,17 +1,17 @@
 import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native';
-import FoodDetailCart from '../../components/FoodDetailCart';
 import { styles } from './style';
 import RestaurantCard from '../../components/restaurantCard';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import FoodDetailCard from '../../components/foodDetailCard';
 
 type FoodDataType = {
     id: string;
     name: string;
     imageUri: ImageSourcePropType;
     restaurantName: string;
-    price: string;
+    price: number;
 }
 
 type RestaurantDataType = {
@@ -30,28 +30,28 @@ const FoodData: FoodDataType[] = [
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
-        price: '40',
+        price: 40,
     },
     {
         id: '2',
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
-        price: '40',
+        price: 40,
     },
     {
         id: '3',
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
-        price: '40',
+        price: 40,
     },
     {
         id: '4',
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
-        price: '40',
+        price: 400,
     },
 ]
 
@@ -138,7 +138,13 @@ const FoodScreen: React.FC<IProps> = () => {
                 numColumns={2}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                    <FoodDetailCart detail={item}/>
+                    <FoodDetailCard
+                        id={item.id}
+                        imageUri={item.imageUri}
+                        name={item.name}
+                        price={item.price}
+                        restaurantName={item.restaurantName}
+                    />
                 )}
                 contentContainerStyle={{flex: 1, width: layout.width, gap: 10, alignItems: 'center',}}
                 columnWrapperStyle={{gap: 20}}

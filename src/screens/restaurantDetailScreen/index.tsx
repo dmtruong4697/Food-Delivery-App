@@ -1,17 +1,17 @@
 import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, ScrollView, ImageSourcePropType } from 'react-native'
 import React, { useState } from 'react'
 import { styles } from './styles'
-import FoodDetailCart from '../../components/FoodDetailCart'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Modal from "react-native-modal";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import FoodDetailCard from '../../components/foodDetailCard'
 
 type DishItemType = {
     id: string;
     imageUri: ImageSourcePropType;
     name: string;
     restaurantName: string;
-    price: string;
+    price: number;
 }
 
 type DishType = {
@@ -41,28 +41,28 @@ const DishTypeData: DishType[] = [
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Burger Bistro nnn',
                 restaurantName: 'Rose Garden',
-                price: '40',
+                price: 33,
             },
             {
                 id: '2',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
-                price: '60',
+                price: 11,
             },
             {
                 id: '3',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Burger Bistro',
                 restaurantName: 'Rose Garden',
-                price: '40',
+                price: 22,
             },
             {
                 id: '4',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
-                price: '60',
+                price: 55,
             },
         ],
     },
@@ -75,14 +75,14 @@ const DishTypeData: DishType[] = [
                 imageUri: require('../../../assets/food/pizza.png'),
                 name: 'Bistro',
                 restaurantName: 'Rose Garden',
-                price: '40',
+                price: 44,
             },
             {
                 id: '2',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
-                price: '60',
+                price: 66,
             },
         ],
     },
@@ -95,21 +95,21 @@ const DishTypeData: DishType[] = [
                 imageUri: require('../../../assets/food/pizza.png'),
                 name: 'Bistro',
                 restaurantName: 'Rose Garden',
-                price: '40',
+                price: 77,
             },
             {
                 id: '2',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
-                price: '60',
+                price: 88,
             },
             {
                 id: '3',
                 imageUri: require('../../../assets/food/pizza.png'),
                 name: 'Burger Bistro',
                 restaurantName: 'Rose Garden',
-                price: '40',
+                price: 99,
             },
         ],
     },
@@ -276,7 +276,13 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
                 numColumns={2}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                    <FoodDetailCart detail={item}/>
+                    <FoodDetailCard
+                        id={item.id}
+                        imageUri={item.imageUri}
+                        name={item.name}
+                        price={item.price}
+                        restaurantName={item.restaurantName}
+                    />
                 )}
                 contentContainerStyle={{flex: 1, width: layout.width,  gap: 10, alignItems: 'center',}}
                 columnWrapperStyle={{gap: 20}}

@@ -1,11 +1,12 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { styles } from './styles'
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Button from '../../components/button';
 import Modal from "react-native-modal";
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import RBSheet from "react-native-raw-bottom-sheet";
+import MapView from 'react-native-maps';
 
 interface IProps {}
 
@@ -14,18 +15,15 @@ const TrackOrderScreen: React.FC<IProps>  = () => {
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [isShowModal, setIsShowModal] = useState(false);
 
-    const bottomSheetRef = useRef<BottomSheet>(null);
-
-    const handleSheetChanges = useCallback((index: number) => {
-        console.log('handleSheetChanges', index);
-    }, []);
+    const refRBSheet = useRef();
 
   return (
     <View style={styles.viewContainer}>
       <View style={styles.viewHeader}>
         <TouchableOpacity
             style={styles.btnBack}
-            onPress={() => {navigation.goBack()}}
+            // onPress={() => {navigation.goBack()}}
+            onPress={() => refRBSheet.current.open()}
         >
             <Image style={styles.imgButtonBack} source={require('../../../assets/icon/arrowLeft.png')}/>
         </TouchableOpacity>
@@ -36,17 +34,49 @@ const TrackOrderScreen: React.FC<IProps>  = () => {
       </View>
 
       <View style={styles.viewMap}>
-        <Button content='Open Modal' onPress={() => {setIsShowModal(true)}}/>
+        <Button content='Open Modal' onPress={() => setIsShowModal(true)}/>
+        {/* <MapView
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        /> */}
       </View>
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        onChange={handleSheetChanges}
+      {/* <RBSheet
+        ref={refRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={false}
+        customStyles={{
+          wrapper: {
+            backgroundColor: "transparent"
+          },
+          draggableIcon: {
+            backgroundColor: "#F6F6F6",
+            width: 72,
+            height: 7,
+          },
+          container: {
+            // backgroundColor: 'pink',
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+          },
+        }}
+      /> */}
+
+      <Modal
+        isVisible={isShowModal}
+        onSwipeComplete={() => setIsShowModal(false)}
+        onBackdropPress={() => setIsShowModal(false)}
+        swipeThreshold={200}
+        swipeDirection="down"
       >
-        <BottomSheetView style={{alignItems: 'center', flex: 1,}}>
-          <Text>Awesome 🎉</Text>
-        </BottomSheetView>
-      </BottomSheet>
+        <View style={{ flex: 1, height: 100, width: '100%', backgroundColor: 'white' }}>
+          <Text>I am the modal content!</Text>
+        </View>
+      </Modal>
 
     </View>
   )

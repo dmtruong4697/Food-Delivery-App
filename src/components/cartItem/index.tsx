@@ -7,6 +7,7 @@ interface IProps {
     price: string;
     quantity: number;
 }
+
 const CartItem: React.FC<IProps> = ({name, price, quantity}) => {
 
   return (
