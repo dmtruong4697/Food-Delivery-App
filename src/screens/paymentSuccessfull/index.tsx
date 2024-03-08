@@ -1,18 +1,21 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { styles } from './styles'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const PaymentSuccessfullScreen = () => {
+interface IProps {}
 
-    const navigation = useNavigation();
+const PaymentSuccessfullScreen: React.FC<IProps> = () => {
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   return (
     <View style={styles.viewContainer}>
       <View style={styles.viewHeader}>
         <TouchableOpacity
             style={styles.btnCancel}
-            onPress={() => {navigation.navigate({name: "Home"})}}
+            onPress={() => {navigation.navigate('Home')}}
         >
             <Image style={styles.imgButtonCancel} source={require('../../../assets/icon/cancel.png')}/>
         </TouchableOpacity>

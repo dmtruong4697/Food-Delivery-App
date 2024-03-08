@@ -1,34 +1,53 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import FoodDetailCart from '../../components/FoodDetailCart';
 import { styles } from './style';
 import RestaurantCard from '../../components/restaurantCard';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const FoodData = [
+type FoodDataType = {
+    id: string;
+    name: string;
+    imageUri: ImageSourcePropType;
+    restaurantName: string;
+    price: string;
+}
+
+type RestaurantDataType = {
+    id: string;
+    name: string;
+    imageUri: ImageSourcePropType;
+    description: string;
+    shipping: string;
+    time: string;
+    rating: string;
+}
+
+const FoodData: FoodDataType[] = [
     {
-        id: 1,
+        id: '1',
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: '40',
     },
     {
-        id: 2,
+        id: '2',
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: '40',
     },
     {
-        id: 3,
+        id: '3',
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: '40',
     },
     {
-        id: 4,
+        id: '4',
         name: 'Burger Bistro',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
@@ -36,9 +55,9 @@ const FoodData = [
     },
 ]
 
-const RestaurantData = [
+const RestaurantData: RestaurantDataType[] = [
     {
-        id: 1,
+        id: '1',
         imageUri: require('../../../assets/image/restaurant.png'),
         name: 'Rose Garden Restaurant',
         description: 'Burger - Chicken - Wings',
@@ -47,7 +66,7 @@ const RestaurantData = [
         time: '20 min',
     },
     {
-        id: 2 ,
+        id: '2' ,
         imageUri: require('../../../assets/image/restaurant.png'),
         name: 'Rose Garden Restaurant',
         description: 'Burger - Chicken - Wings',
@@ -57,9 +76,11 @@ const RestaurantData = [
     },
 ]
 
-const FoodScreen = () => {
+interface IProps {}
 
-    const navigation = useNavigation();
+const FoodScreen: React.FC<IProps> = () => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [layout, setLayout] = useState({
         width: 0,
         height: 0,
@@ -73,42 +94,19 @@ const FoodScreen = () => {
 
       <View style={styles.headerView}>
         <TouchableOpacity
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 45,
-                width: 45,
-                backgroundColor: '#ECF0F4',
-                borderRadius: 1000,
-            }}
+            style={styles.btnBack}
             onPress={() => {navigation.goBack()}}
         >
-            <Image style={{height: 12, width: 6,}} source={require('../../../assets/icon/arrowLeft.png')}/>
+            <Image style={styles.imgButtonBack} source={require('../../../assets/icon/arrowLeft.png')}/>
         </TouchableOpacity>
 
         <View
-            style={{
-                flex: 1,
-                //flexDirection: 'column', 
-                justifyContent: 'center',
-                height: '100%',
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingTop: 5,
-            }}
+            style={styles.viewSelectMenu}
         >
             <TouchableOpacity
-                style={{
-                    height: 45,
-                    width: 102,
-                    borderWidth: 1,
-                    borderColor: '#ECF0F4',
-                    borderRadius: 1000,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
+                style={styles.btnSelectMenu}
             >
-                <Text style={{fontSize: 12, fontWeight: '700', color: '#181C2E',}}>
+                <Text style={styles.txtSelectMenu}>
                     BURGER
                     <Text style={{color: '#F58D1D',}}>▼</Text>
                 </Text>
@@ -116,45 +114,21 @@ const FoodScreen = () => {
         </View>
 
         <TouchableOpacity
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 45,
-                width: 45,
-                backgroundColor: '#181C2E',
-                borderRadius: 1000,
-            }}
-            onPress={() => {navigation.navigate({name: "Search"})}}
+            style={styles.btnSearch}
+            onPress={() => {navigation.navigate('Search')}}
         >
-            <Image style={{height: 15, width: 15,}} source={require('../../../assets/icon/search2.png')}/>
+            <Image style={styles.imgButtonSearch} source={require('../../../assets/icon/search2.png')}/>
         </TouchableOpacity>
         <TouchableOpacity
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 45,
-                width: 45,
-                backgroundColor: '#ECF0F4',
-                borderRadius: 1000,
-                marginLeft: 5,
-            }}
+            style={styles.btnFilter}
         >
-            <Image style={{height: 18, width: 22,}} source={require('../../../assets/icon/filter.png')}/>
+            <Image style={styles.imgButtonFilter} source={require('../../../assets/icon/filter.png')}/>
         </TouchableOpacity>
       </View>
 
       <View style={styles.popularBurger}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 27,
-                    width: '100%',
-                    marginBottom: 20,
-                    marginLeft: 20,
-                }}
-            >
-                <Text style={{fontSize: 20, fontWeight: '400', color: '#32343E', flex: 1,}}>Popular Burger</Text>
+            <View style={styles.viewTitle}>
+                <Text style={styles.txtTitle}>Popular Burger</Text>
             </View>
 
             <FlatList
@@ -173,17 +147,8 @@ const FoodScreen = () => {
       </View>
 
       <View style={styles.popularBurger}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: 27,
-                    width: '100%',
-                    marginBottom: 20,
-                    marginLeft: 20,
-                }}
-            >
-                <Text style={{fontSize: 20, fontWeight: '400', color: '#32343E', flex: 1,}}>Open Restaurants</Text>
+            <View style={styles.viewTitle}>
+                <Text style={styles.txtTitle}>Open Restaurants</Text>
             </View>
 
             <FlatList
@@ -192,7 +157,14 @@ const FoodScreen = () => {
                 scrollEnabled={false}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                    <RestaurantCard detail={item}/>
+                    <RestaurantCard
+                        description={item.description}
+                        imageUri={item.imageUri}
+                        name={item.name}
+                        rating={item.rating}
+                        shipping={item.shipping}
+                        time={item.time}
+                    />
                 )}
                 contentContainerStyle={{alignItems: 'center', width: '100%',}}
             />

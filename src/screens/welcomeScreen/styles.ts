@@ -29,5 +29,15 @@ export const styles = StyleSheet.create({
     buttonText: {
         textAlign: 'center',
         fontSize: 16,
-    }
+    },
+
+    btnSkip: {
+      width: 306,
+      height: 66,
+      borderRadius: 12,
+      // backgroundColor: "#FFFFFF",
+      alignSelf: 'center',
+      justifyContent: 'center',
+      marginBottom: 15,
+    },
   });

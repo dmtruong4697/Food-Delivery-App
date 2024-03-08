@@ -1,13 +1,26 @@
-import { View, Text, TouchableOpacity, Image, useWindowDimensions, ScrollView, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, Image, useWindowDimensions, ScrollView, FlatList, ImageSourcePropType } from 'react-native'
 import React from 'react'
 import { styles } from './styles'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import OrderItem from '../../components/orderItem';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const OngoingData = [
+type CartType = {
+    id: string;
+    type: string;
+    status: string;
+    completeTime: string;
+    imageUri: ImageSourcePropType;
+    name: string;
+    price: string;
+    quantity: number;
+    code: string;
+}
+
+const OngoingData: CartType[] = [
     {
-        id: 1,
+        id: '1',
         type: 'Food',
         status: 'Ongoing',
         completeTime: '29 JAN, 12:30',
@@ -18,7 +31,7 @@ const OngoingData = [
         code: '242432',
     },
     {
-        id: 2,
+        id: '2',
         type: 'Food',
         status: 'Ongoing',
         completeTime: '29 JAN, 12:30',
@@ -29,7 +42,7 @@ const OngoingData = [
         code: '162432',
     },
     {
-        id: 3,
+        id: '3',
         type: 'Drink',
         status: 'Ongoing',
         completeTime: '29 JAN, 12:30',
@@ -41,9 +54,9 @@ const OngoingData = [
     },
 ];
 
-const HistoryData = [
+const HistoryData: CartType[] = [
     {
-        id: 1,
+        id: '1',
         type: 'Food',
         status: 'Completed',
         completeTime: '29 JAN, 12:30',
@@ -54,7 +67,7 @@ const HistoryData = [
         code: '242432',
     },
     {
-        id: 2,
+        id: '2',
         type: 'Food',
         status: 'Completed',
         completeTime: '29 JAN, 12:30',
@@ -65,7 +78,7 @@ const HistoryData = [
         code: '162432',
     },
     {
-        id: 3,
+        id: '3',
         type: 'Drink',
         status: 'Canceled',
         completeTime: '29 JAN, 12:30',
@@ -77,9 +90,11 @@ const HistoryData = [
     },
 ];
 
-const MyOrderScreen = () => {
+interface IProps {}
 
-    const navigation = useNavigation();
+const MyOrderScreen: React.FC<IProps>  = () => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const layout = useWindowDimensions();
 
     const [index, setIndex] = React.useState(0);
@@ -94,8 +109,19 @@ const MyOrderScreen = () => {
                     nestedScrollEnabled
                     data={OngoingData}
                     keyExtractor={item => item.id}
-                    renderItem={({item}) => (
-                        <OrderItem detail={item} onPressTrack={() => {navigation.navigate({name: "Tracker"})}}/>
+                    renderItem={({item}: {item: CartType}) => (
+                        <OrderItem 
+                            onPressTrack={() => {navigation.navigate('Tracker')}}
+                            code={item.code}
+                            completeTime={item.completeTime}
+                            imageUri={item.imageUri}
+                            name={item.name}
+                            onPressCancel={() => {}}
+                            price={item.price}
+                            quantity={item.quantity}
+                            status={item.status}
+                            type={item.type}
+                        />
                     )}
                 />
         </View>
@@ -108,7 +134,18 @@ const MyOrderScreen = () => {
                     data={HistoryData}
                     keyExtractor={item => item.id}
                     renderItem={({item}) => (
-                        <OrderItem detail={item}/>
+                        <OrderItem 
+                            onPressTrack={() => {}}
+                            code={item.code}
+                            completeTime={item.completeTime}
+                            imageUri={item.imageUri}
+                            name={item.name}
+                            onPressCancel={() => {}}
+                            price={item.price}
+                            quantity={item.quantity}
+                            status={item.status}
+                            type={item.type}
+                        />
                     )}
                 />
         </View>
@@ -158,16 +195,6 @@ const MyOrderScreen = () => {
         />
         </View>
     </View>
-
-    // <View style={styles.viewContainer}>
-    // <TabView
-    //     navigationState={{ index, routes }}
-    //     renderScene={renderScene}
-    //     onIndexChange={setIndex}
-    //     initialLayout={{ width: layout.width }}
-    //     style={{height:300, backgroundColor: 'pink'}}
-    // />
-    // </View>
   )
 }
 

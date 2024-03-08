@@ -1,12 +1,19 @@
 import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { FC, useState } from 'react'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import FoodCard from '../../components/FoodCard';
 import ProductItem1 from '../../components/ProductItem1';
 import FastFoodCard from '../../components/FastFoodCard';
 import { styles } from './styles';
 import Modal from "react-native-modal";
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+import Button from '../../components/button';
 
+export interface ICategory {
+    id: number;
+    imageUri: string;
+    content: string;
+}
 const CategoriesData = [
     {
         id: 1,
@@ -83,9 +90,9 @@ const PopularFastFoodData = [
     },
 ]
 
-const HomeScreen = () => {
+const HomeScreen: FC = () => {
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [isShowModal, setIsShowModal] = useState(false);
 
   return (
@@ -94,7 +101,7 @@ const HomeScreen = () => {
       <View style={styles.headerView}>
         <TouchableOpacity
             style={styles.btnProfile}
-            onPress={() => {navigation.navigate({name: "MenuProfile"})}}
+            onPress={() => {navigation.navigate('MenuProfile')}}
         >
             <Image style={{height: 16, width: 14,}} source={require('../../../assets/icon/menu.png')}/>
         </TouchableOpacity>
@@ -112,7 +119,7 @@ const HomeScreen = () => {
 
         <TouchableOpacity
             style={styles.btnCart}
-            onPress={() => {navigation.navigate({name: "MyCart"})}}
+            onPress={() => {navigation.navigate('MyCart')}}
         >
             <Image style={styles.imgButtonCart} source={require('../../../assets/icon/cart.png')}/>
         </TouchableOpacity>
@@ -128,7 +135,7 @@ const HomeScreen = () => {
         <TouchableOpacity 
             style={styles.searchField}
             onPress={() => {
-                navigation.navigate({name: "Search"})
+                navigation.navigate('Search')
             }}
         >
             <Image style={{width: 24, height: 24,}} source={require('../../../assets/icon/search.png')}/>
@@ -157,7 +164,7 @@ const HomeScreen = () => {
                 nestedScrollEnabled
                 data={CategoriesData}
                 horizontal={true}
-                keyExtractor={item => item.id}
+                // keyExtractor={(item) => item.id}
                 renderItem={({item}) => (
                     <ProductItem1 content={item.content} imageUri={item.imageUri}/>
                 )}
@@ -183,7 +190,7 @@ const HomeScreen = () => {
                 nestedScrollEnabled
                 data={OpenRestaurantData}
                 horizontal={true}
-                keyExtractor={item => item.id}
+                // keyExtractor={item => item.id}
                 renderItem={({item}) => (
                     <FoodCard detail={item}/>
                 )}
@@ -203,10 +210,11 @@ const HomeScreen = () => {
                 nestedScrollEnabled
                 data={PopularFastFoodData}
                 horizontal={true}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => (
-                    <FastFoodCard detail={item}/>
-                )}
+                // keyExtractor={item => item.id}
+                renderItem={({item}) => {
+                    return (<FastFoodCard detail={item}/>)
+                    
+                }}
                 contentContainerStyle={{height: 160, alignItems: 'center', gap: 10,}}
             />
 
@@ -214,7 +222,7 @@ const HomeScreen = () => {
 
         <Modal
             isVisible={isShowModal}
-            style={styles.modalContainer}
+            // style={styles.modalContainer}
             onBackdropPress={() => {setIsShowModal(false)}}
             backdropOpacity={0.5}
             
@@ -223,12 +231,20 @@ const HomeScreen = () => {
                 <TouchableOpacity
                     style={styles.btnCloseModal}
                     onPress={() => {setIsShowModal(false)}}
-                    colors={['#4c669f', '#3b5998', '#192f6a']}
                 >
                     <Image style={{height: 16, width: 14,}} source={require('../../../assets/icon/close.png')}/>
                 </TouchableOpacity>
 
                 <Text style={styles.txtTitle}>Hurry Offers!</Text>
+                <Text style={styles.txtCode}>#1243CD2</Text>
+                <Text style={styles.txtDescription}>Use the cupon get 25% discount</Text>
+
+                <TouchableOpacity
+                    style={styles.btnGotIt}
+                    onPress={() => {setIsShowModal(false)}}
+                >
+                    <Text style={styles.txtDescription}>GOT IT</Text>
+                </TouchableOpacity>
             </View>
         </Modal>
 

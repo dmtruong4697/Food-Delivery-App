@@ -1,28 +1,36 @@
 import { FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useState } from 'react'
 import { styles } from './style'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Modal from "react-native-modal";
 import Button from '../../components/button';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const sizeData = [
+type SizeDataType = {
+    id: string;
+    size: number;
+}
+
+const sizeData: SizeDataType[] = [
     {
-        id: 1,
+        id: '1',
         size: 10,
     },
     {
-        id: 2,
+        id: '2',
         size: 14,
     },
     {
-        id: 3,
+        id: '3',
         size: 16,
     }
 ]
 
-const FoodDetailScreen = () => {
+interface IProps {}
 
-    const navigation = useNavigation();
+const FoodDetailScreen: React.FC<IProps> = () => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [sizeIndex, setSizeIndex] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [isShowModal, setIsShowModal] = useState(false);
@@ -61,7 +69,7 @@ const FoodDetailScreen = () => {
 
       <TouchableOpacity 
         style={styles.btnRestaurant}
-        onPress={() => {navigation.navigate({name: "RestaurantDetail"})}}
+        onPress={() => {navigation.navigate('RestaurantDetail')}}
       >
         <Image style={styles.imgRestaurantButton} source={require('../../../assets/food/burger.png')}/>
         <Text style={styles.txtRestaurantButton}>Uttora Coffe House</Text>
@@ -96,15 +104,15 @@ const FoodDetailScreen = () => {
                 data={sizeData}
                 horizontal={true}
                 keyExtractor={item => item.id}
-                renderItem={({item}) => (
+                renderItem={({item}: {item: SizeDataType}) => (
                     <TouchableOpacity
-                        style={[styles.btnSize, {backgroundColor: (item.id == sizeIndex)? '#F58D1D':'#F0F5FA'}]}
+                        style={[styles.btnSize, {backgroundColor: (Number(item.id) == sizeIndex)? '#F58D1D':'#F0F5FA'}]}
                         onPress={() => {
-                            setSizeIndex(item.id);
+                            setSizeIndex(Number(item.id));
                             setIsShowModal(true);
                         }}
                     >
-                        <Text style={[styles.txtButtonSize,{color: (item.id == sizeIndex)? '#FFFFFF':'#121223'}]}>{item.size}"</Text>
+                        <Text style={[styles.txtButtonSize,{color: (Number(item.id) == sizeIndex)? '#FFFFFF':'#121223'}]}>{item.size}"</Text>
                     </TouchableOpacity>
                 )}
                 // contentContainerStyle={{height: 50, alignItems: 'center', width: '100%',}}
@@ -138,7 +146,7 @@ const FoodDetailScreen = () => {
                 </View>
             </View>
 
-            <Button content={'ADD TO CART'}/>
+            <Button onPress={() => {console.log('Add to cart')}} content={'ADD TO CART'}/>
         </Modal>
 
     </ScrollView>

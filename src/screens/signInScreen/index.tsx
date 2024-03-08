@@ -1,11 +1,12 @@
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { FC, useState } from 'react'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { styles } from './styles'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const SignInScreen = () => {
+const SignInScreen: FC = () => {
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
     const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -13,15 +14,11 @@ const SignInScreen = () => {
     <View style={styles.container}>
       
       <View style={styles.title1}>
-        <View 
-            style={{
-                width: 219,
-                height: 72,
-            }}
+        <View style={{width: 219, height: 72,}}
         >
-            <Text style={{fontSize: 24, fontWeight: '700', color: '#32343E'}}>
+            <Text style={styles.txtTitle}>
                 Just {""}
-                <Text style={{fontSize: 24, fontWeight: '700', color: '#F44336'}}>Sign in</Text>
+                <Text style={styles.txtTitle2}>Sign in</Text>
                 ,we'll prepar your order
             </Text>
         </View>
@@ -29,10 +26,7 @@ const SignInScreen = () => {
 
       <View style={styles.title2}>
             <View 
-                style={{
-                    height: 48,
-                    width: 231,
-                }}
+                style={{height: 48, width: 231,}}
             >
                 <Text style={{fontSize: 16, fontWeight: '500', color: '#646982'}}>
                     If you don't have an account please {""}
@@ -49,14 +43,7 @@ const SignInScreen = () => {
                 <TextInput 
                     placeholder='email'
                     placeholderTextColor={'#939393'}
-                    style={{
-                        flex: 1,
-                        height: '100%',
-                        padding: 14,
-                        fontSize: 16,
-                        fontWeight: '500',
-                        color: '#939393',
-                    }}
+                    style={styles.viewInput}
                 />
             </View>
         </View>
@@ -68,14 +55,7 @@ const SignInScreen = () => {
                     placeholder='password'
                     placeholderTextColor={'#939393'}
                     secureTextEntry={isShowPassword}
-                    style={{
-                        flex: 1,
-                        height: '100%',
-                        padding: 14,
-                        fontSize: 16,
-                        fontWeight: '500',
-                        color: '#939393',
-                    }}
+                    style={styles.viewInput}
                 />
                 <TouchableOpacity
                     onPress={() => {setIsShowPassword(!isShowPassword)}}
@@ -87,13 +67,7 @@ const SignInScreen = () => {
 
         <TouchableOpacity>
             <Text
-                style={{
-                    alignSelf: 'flex-end',
-                    fontSize: 16,
-                    fontWeight: '500',
-                    color: '#939393',
-                    marginTop: 22,
-                }}
+                style={styles.btnForgotPassword}
             >Forgot password?</Text>
         </TouchableOpacity>
 
@@ -104,7 +78,7 @@ const SignInScreen = () => {
         <TouchableOpacity
             style={styles.signInButton}
             onPress={() => {
-                navigation.navigate({name: "Home"})
+                navigation.navigate('Home')
             }}
         >
             <Text style={{fontSize: 16, fontWeight: '700', color: '#FFFFFF'}}
@@ -112,13 +86,7 @@ const SignInScreen = () => {
         </TouchableOpacity>
 
         <Text 
-            style={{
-                fontSize: 16, 
-                fontWeight: '500', 
-                color: '#000000', 
-                marginTop: 30, 
-                marginBottom: 30,
-            }}
+            style={styles.txtOr}
         >Or</Text>
 
         <TouchableOpacity

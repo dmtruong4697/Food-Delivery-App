@@ -2,9 +2,12 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { styles } from './styles'
 
-const CartItem = (props) => {
-
-    const {detail} = props;
+interface IProps {
+    name: string;
+    price: string;
+    quantity: number;
+}
+const CartItem: React.FC<IProps> = ({name, price, quantity}) => {
 
   return (
     <View style={styles.viewContainer}>
@@ -16,8 +19,8 @@ const CartItem = (props) => {
         <View style={styles.viewContentContainer}>
             <View style={styles.viewContent}>
                 <View style={styles.viewText}>
-                    <Text style={styles.txtName}>{detail.name}</Text>
-                    <Text style={styles.txtPrice}>${detail.price}</Text>
+                    <Text style={styles.txtName}>{name}</Text>
+                    <Text style={styles.txtPrice}>${price}</Text>
                 </View>
 
                 <TouchableOpacity style={styles.btnDelete}>
@@ -30,7 +33,7 @@ const CartItem = (props) => {
                     <Text style={styles.txtNumberInput}>-</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.txtNumberInput}>{detail.quantity}</Text>
+                <Text style={styles.txtNumberInput}>{quantity}</Text>
                 
                 <TouchableOpacity style={styles.btnNumberInput}>
                     <Text style={styles.txtNumberInput}>+</Text>

@@ -65,4 +65,13 @@ export const styles = StyleSheet.create({
         //backgroundColor: 'pink',
         marginTop: 20,
     },
+
+    inputField: {
+        flex: 1,
+        height: '100%',
+        fontSize: 16,
+        fontWeight: '400',
+        color: '#181C2E',
+        marginLeft: 5,
+    },
 })

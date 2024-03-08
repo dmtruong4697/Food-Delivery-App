@@ -7,7 +7,7 @@ class store {
         makeAutoObservable(this);
     }
 
-    setSearchText(text) {
+    setSearchText(text: string) {
         this.searchText = text;
     }
 }

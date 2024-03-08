@@ -1,12 +1,25 @@
-import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, Image, FlatList, ImageSourcePropType } from 'react-native'
+import React, { FC, useState } from 'react'
 import { styles } from './styles'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Button from '../../components/button'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const MethodData = [
+type MethodItemType = {
+    id: string;
+    name: string;
+    number: string;
+}
+
+type MethodDataType = {
+    id: string;
+    name: string;
+    imageUri: ImageSourcePropType;
+    list: MethodItemType[];
+}
+const MethodData: MethodDataType[] = [
     {
-        id: 1,
+        id: '1',
         name: 'Cash',
         imageUri: require('../../../assets/icon/payment/cash.png'),
         list: [
@@ -14,29 +27,29 @@ const MethodData = [
         ],
     },
     {
-        id: 2,
+        id: '2',
         name: 'Visa',
         imageUri: require('../../../assets/icon/payment/visa.png'),
         list: [
             {
-                id: 1,
+                id: '1',
                 name: "Visa",
                 number: "123 456 789",
             },
             {
-                id: 2,
+                id: '2',
                 name: "Visa 2",
                 number: "123 456 789",
             },
             {
-                id: 3,
+                id: '3',
                 name: "Visa 3",
                 number: "123 456 789",
             },
         ],
     },
     {
-        id: 3,
+        id: '3',
         name: 'Mastercard',
         imageUri: require('../../../assets/icon/payment/mastercard.png'),
         list: [
@@ -44,7 +57,7 @@ const MethodData = [
         ],
     },
     {
-        id: 4,
+        id: '4',
         name: 'Paypal',
         imageUri: require('../../../assets/icon/payment/paypal.png'),
         list: [
@@ -52,10 +65,10 @@ const MethodData = [
         ],
     },
 ]
-const PaymentScreen = () => {
+const PaymentScreen: FC = () => {
 
-    const navigation = useNavigation();
-    const [methodIndex, setMethodIndex] = useState(1);
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+    const [methodIndex, setMethodIndex] = useState('1');
 
   return (
     <View style={styles.viewContainer}>
@@ -78,13 +91,13 @@ const PaymentScreen = () => {
             data={MethodData}
             keyExtractor={item => item.id}
             horizontal
-            renderItem={({item}) => (
+            renderItem={({item}: {item: MethodDataType}) => (
                 <View style={styles.viewMethod}>
                     <TouchableOpacity
                         style={[styles.btnMethod,{
-                            backgroundColor: (methodIndex == item.id)? null:'#F0F5FA',
-                            borderWidth: (methodIndex == item.id)? 2:0,
-                            borderColor: (methodIndex == item.id)? '#FF7622':null,
+                            backgroundColor: (methodIndex === item.id)? null:'#F0F5FA',
+                            borderWidth: (methodIndex === item.id)? 2:0,
+                            borderColor: (methodIndex === item.id)? '#FF7622':null,
                         }]}
                         onPress={() => {setMethodIndex(item.id)}}
                     >
@@ -99,17 +112,17 @@ const PaymentScreen = () => {
 
       <View style={styles.viewCardList}>
         {
-            (MethodData[methodIndex-1].list.length == 0 && MethodData[methodIndex-1].name != "Cash")?
+            (MethodData[Number(methodIndex)-1].list.length == 0 && MethodData[Number(methodIndex)-1].name != "Cash")?
             <View style={styles.viewNocard}>
                 <Image style={styles.imgNocard} source={require('../../../assets/image/nocard.png')}/>
-                <Text style={styles.txtCardTitle}>No {MethodData[methodIndex-1].name} card added</Text>
-                <Text style={styles.txtCard}>You can add a {MethodData[methodIndex-1].name} and save it for later</Text>
+                <Text style={styles.txtCardTitle}>No {MethodData[Number(methodIndex)-1].name} card added</Text>
+                <Text style={styles.txtCard}>You can add a {MethodData[Number(methodIndex)-1].name} and save it for later</Text>
             </View>
             :
                 <FlatList
-                    data={MethodData[methodIndex-1].list}
+                    data={MethodData[Number(methodIndex)-1].list}
                     keyExtractor={item => item.id}
-                    renderItem={({item}) => (
+                    renderItem={({item}: {item: MethodItemType}) => (
                         <View style={styles.viewCard}>
                             <View style={styles.viewCardInfo}>
                                 <Text style={styles.txtCardTitle}>{item.name}</Text>
@@ -127,10 +140,10 @@ const PaymentScreen = () => {
                 />
         }
 
-        {(MethodData[methodIndex-1].name != "Cash") &&
+        {(MethodData[Number(methodIndex)-1].name != "Cash") &&
             <TouchableOpacity
                 style={styles.btnAddNew}
-                onPress={() => {navigation.navigate({name: "AddCard"})}}
+                onPress={() => {navigation.navigate('AddCard')}}
             >
                 <Text style={styles.txtAddnew}>+ ADD NEW</Text>
             </TouchableOpacity>
@@ -143,7 +156,7 @@ const PaymentScreen = () => {
             <Text style={styles.txtPrice}> $96</Text>
         </View>
 
-        <Button content={'PAY & CONFIRM'} onPress={() => {navigation.navigate({name: "PaymentSuccessfull"})}}/>
+        <Button content={'PAY & CONFIRM'} onPress={() => {navigation.navigate('PaymentSuccessfull')}}/>
       </View>
 
     </View>

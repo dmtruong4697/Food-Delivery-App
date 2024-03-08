@@ -1,40 +1,51 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ImageSourcePropType } from 'react-native'
 import React from 'react'
 import { styles } from './styles'
 
-const OrderItem = (props) => {
+interface IProps {
+  type: string;
+  status: string;
+  imageUri: ImageSourcePropType;
+  name: string;
+  price: string;
+  completeTime: string;
+  quantity: number;
+  code: string;
+  onPressTrack: () => void;
+  onPressCancel: () => void;
+}
 
-    const {detail, onPressTrack, onPressCancel} = props;
+const OrderItem: React.FC<IProps> = ({type, code, completeTime, imageUri, name, onPressCancel, onPressTrack, price, quantity, status}) => {
 
   return (
     <View style={styles.viewContainer}>
       <View style={styles.viewType}>
         <View style={{flexDirection: 'row'}}>
-            <Text style={styles.txtType}>{detail.type}</Text>
+            <Text style={styles.txtType}>{type}</Text>
             {
-                (detail.status != "Ongoing") &&
-                <Text style={[styles.txtStatus, {color: (detail.status == 'Completed')? '#059C6A':'#FF0000'}]}>{detail.status}</Text>
+                (status != "Ongoing") &&
+                <Text style={[styles.txtStatus, {color: (status == 'Completed')? '#059C6A':'#FF0000'}]}>{status}</Text>
             }
         </View>
       </View>
 
       <View style={styles.viewContent}>
-        <Image style={styles.imgImage} source={detail.imageUri}/>
+        <Image style={styles.imgImage} source={imageUri}/>
 
         <View style={styles.viewInfo}>
-            <Text style={styles.txtName}>{detail.name}</Text>
+            <Text style={styles.txtName}>{name}</Text>
             <View style={{flexDirection: 'row', padding: 5,}}>
-                <Text style={styles.txtName}>{detail.price} </Text>
-                {(detail.status != "Ongoing") && <Text style={styles.txtQuantity}>| {detail.completeTime} •</Text>}
-                <Text style={styles.txtQuantity}> {detail.quantity} Item
+                <Text style={styles.txtName}>{price} </Text>
+                {(status != "Ongoing") && <Text style={styles.txtQuantity}>| {completeTime} •</Text>}
+                <Text style={styles.txtQuantity}> {quantity} Item
                 </Text>
             </View>
         </View>
 
-        <Text style={styles.txtCode}>#{detail.code}</Text>
+        <Text style={styles.txtCode}>#{code}</Text>
       </View>
 
-      {(detail.status == 'Ongoing')?
+      {(status == 'Ongoing')?
       (<View style={styles.viewButtonGroup}>
         <TouchableOpacity 
             style={[styles.btnButton, {backgroundColor: '#FF7622',}]}

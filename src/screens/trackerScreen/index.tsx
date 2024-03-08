@@ -2,8 +2,15 @@ import { View, Text, Image, TextInput } from 'react-native'
 import React from 'react'
 import { styles } from './styles'
 import Button from '../../components/button'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 
-const TrackerScreen = () => {
+interface IProps {}
+
+const TrackerScreen: React.FC<IProps> = () => {
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   return (
     <View style={styles.viewContainer}>
       <Image style={styles.imgImage} source={require('../../../assets/image/track.png')}/>
@@ -18,7 +25,7 @@ const TrackerScreen = () => {
       />
 
       <View style={styles.viewFooter}>
-        <Button content={'PAY & CONFIRM'}/>
+        <Button onPress={() => {console.log('PAY & CONFIRM')}} content={'PAY & CONFIRM'}/>
       </View>
 
     </View>

@@ -1,12 +1,15 @@
 import { View, Text, TouchableOpacity, Image, TextInput } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react'
 import { styles } from './styles'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Button from '../../components/button'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const AddCardScreen = () => {
+interface IProps {}
 
-    const navigation = useNavigation();
+const AddCardScreen: React.FC<IProps> = () => {
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   return (
     <View style={styles.viewContainer}>
@@ -54,7 +57,7 @@ const AddCardScreen = () => {
       </View>
 
       <View style={styles.viewFooter}>
-        <Button content={'ADD & MAKE PAYMENT'} onPress={() => {navigation.navigate({name: "MyOrder"})}}/>
+        <Button content={'ADD & MAKE PAYMENT'} onPress={() => {navigation.navigate('MyOrder')}}/>
       </View>
 
     </View>

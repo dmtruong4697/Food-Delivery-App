@@ -1,38 +1,64 @@
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, ScrollView } from 'react-native'
+import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, ScrollView, ImageSourcePropType } from 'react-native'
 import React, { useState } from 'react'
 import { styles } from './styles'
 import FoodDetailCart from '../../components/FoodDetailCart'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Modal from "react-native-modal";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const DishTypeData = [
+type DishItemType = {
+    id: string;
+    imageUri: ImageSourcePropType;
+    name: string;
+    restaurantName: string;
+    price: string;
+}
+
+type DishType = {
+    id: string;
+    name: string;
+    list: DishItemType[];
+}
+
+type FilterDataType = {
+    id: string;
+    name: string;
+    list: FilterItemType[];
+}
+
+type FilterItemType = {
+    id: string;
+    name: string;
+}
+
+const DishTypeData: DishType[] = [
     {
-        id: 1,
+        id: '1',
         name: 'Burger',
         list: [
             {
-                id: 1,
+                id: '1',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Burger Bistro nnn',
                 restaurantName: 'Rose Garden',
                 price: '40',
             },
             {
-                id: 2,
+                id: '2',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
                 price: '60',
             },
             {
-                id: 3,
+                id: '3',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Burger Bistro',
                 restaurantName: 'Rose Garden',
                 price: '40',
             },
             {
-                id: 4    ,
+                id: '4',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
@@ -41,18 +67,18 @@ const DishTypeData = [
         ],
     },
     {
-        id: 2,
+        id: '2',
         name: 'Sandwich',
         list: [
             {
-                id: 1,
+                id: '1',
                 imageUri: require('../../../assets/food/pizza.png'),
                 name: 'Bistro',
                 restaurantName: 'Rose Garden',
                 price: '40',
             },
             {
-                id: 2,
+                id: '2',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
@@ -61,25 +87,25 @@ const DishTypeData = [
         ],
     },
     {
-        id: 3,
+        id: '3',
         name: 'Rice',
         list: [
             {
-                id: 1,
+                id: '1',
                 imageUri: require('../../../assets/food/pizza.png'),
                 name: 'Bistro',
                 restaurantName: 'Rose Garden',
                 price: '40',
             },
             {
-                id: 2,
+                id: '2',
                 imageUri: require('../../../assets/food/burger1.png'),
                 name: 'Smokin Burger',
                 restaurantName: 'Rose Garden',
                 price: '60',
             },
             {
-                id: 3,
+                id: '3',
                 imageUri: require('../../../assets/food/pizza.png'),
                 name: 'Burger Bistro',
                 restaurantName: 'Rose Garden',
@@ -88,70 +114,75 @@ const DishTypeData = [
         ],
     },
     {
-        id: 4,
+        id: '4',
         name: 'Chicken',
+        list: [],
     },
     {
-        id: 5,
+        id: '5',
         name: 'Rice',
+        list: [],
     },
     {
-        id: 6,
+        id: '6',
         name: 'Chicken',
+        list: [],
     },
 ]
 
-const FilterData = [
+const FilterData: FilterDataType[] = [
     {
-        id: 1,
+        id: '1',
         name: 'OFFERS',
         list: [
             {
-                id: 1,
+                id: '1',
                 name: 'Delivery',
             },
             {
-                id: 2,
+                id: '2',
                 name: 'Pick Up',
             },
             {
-                id: 3,
+                id: '3',
                 name: 'Offer',
             },
             {
-                id: 4,
+                id: '4',
                 name: 'Online payment avaiable',
             },
         ]
     },
 
     {
-        id: 2,
+        id: '2',
         name: 'DELIVER TIME',
         list: [
             {
-                id: 1,
+                id: '1',
                 name: 'Delivery',
             },
             {
-                id: 2,
+                id: '2',
                 name: 'Pick Up',
             },
             {
-                id: 3,
+                id: '3',
                 name: 'Offer',
             },
             {
-                id: 4,
+                id: '4',
                 name: 'Online payment avaiable',
             },
         ]
     },
 ]
 
-const RestaurantDetailScreen = () => {
+interface IProps {}
 
-    const navigation = useNavigation();
+const RestaurantDetailScreen: React.FC<IProps>  = () => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [dishIndex, setDishIndex] = useState(1);
     const [isShowModal, setIsShowModal] = useState(false);
     const [layout, setLayout] = useState({
@@ -219,9 +250,9 @@ const RestaurantDetailScreen = () => {
                 renderItem={({item}) => (
                     <TouchableOpacity
                         style={[styles.btnDish, {
-                            backgroundColor: (item.id == dishIndex)? '#F58D1D':null,
-                            borderWidth: (item.id == dishIndex)? 0:2,
-                            borderColor: (item.id == dishIndex)? null:'#EDEDED',
+                            backgroundColor: (Number(item.id) === dishIndex)? '#F58D1D':null,
+                            borderWidth: (Number(item.id) === dishIndex)? 0:2,
+                            borderColor: (Number(item.id) === dishIndex)? null:'#EDEDED',
                         }]}
                         onPress={() => {setDishIndex(item.id)}}
                     >

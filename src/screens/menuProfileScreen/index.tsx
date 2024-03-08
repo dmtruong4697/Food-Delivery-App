@@ -1,21 +1,32 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, Image, ScrollView, FlatList, ImageProps, ImageSourcePropType } from 'react-native'
+import React, { FC, useState } from 'react'
 import { styles } from './styles'
 import MenuItem from '../../components/menuItem'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const MenuData = [
+type ListData = {
+    id: string;
+    name: string;
+    iconUri: ImageSourcePropType;
+    onPress: () => void;
+}
+type MenuDataType = {
+    id: string;
+    list: ListData[];
+}
+const MenuData: MenuDataType[] = [
     {
-        id: 1,
+        id: '1',
         list: [
             {
-                id: 1,
+                id: '1',
                 name: 'Personal Info',
                 iconUri: require('../../../assets/icon/menu/personalInfo.png'),
-                onPress: (() => {console.log("personal info")}),
+                onPress: () => {console.log("personal info")},
             },
             {
-                id: 2,
+                id: '2',
                 name: 'Addresses',
                 iconUri: require('../../../assets/icon/menu/address.png'),
                 onPress: (() => {console.log("address")}),
@@ -24,28 +35,28 @@ const MenuData = [
     },
 
     {
-        id: 2,
+        id: '2',
         list: [
             {
-                id: 1,
+                id: '1',
                 name: 'Cart',
                 iconUri: require('../../../assets/icon/menu/cart.png'),
                 onPress: (() => {console.log("cart")}),
             },
             {
-                id: 2,
+                id: '2',
                 name: 'Favoutite',
                 iconUri: require('../../../assets/icon/menu/address.png'),
                 onPress: (() => {console.log("favourite")}),
             },
             {
-                id: 3,
+                id: '3',
                 name: 'Notifications',
                 iconUri: require('../../../assets/icon/menu/personalInfo.png'),
                 onPress: (() => {console.log("noti")}),
             },
             {
-                id: 4,
+                id: '4',
                 name: 'Payment Method',
                 iconUri: require('../../../assets/icon/menu/cart.png'),
                 onPress: (() => {console.log("payment method")}),
@@ -54,22 +65,22 @@ const MenuData = [
     },
 
     {
-        id: 3,
+        id: '3',
         list: [
             {
-                id: 1,
+                id: '1',
                 name: 'FAQs',
                 iconUri: require('../../../assets/icon/menu/cart.png'),
                 onPress: (() => {console.log("faqs")}),
             },
             {
-                id: 2,
+                id: '2',
                 name: 'User Reviews',
                 iconUri: require('../../../assets/icon/menu/address.png'),
                 onPress: (() => {console.log("review")}),
             },
             {
-                id: 3,
+                id: '3',
                 name: 'Settings',
                 iconUri: require('../../../assets/icon/menu/personalInfo.png'),
                 onPress: (() => {console.log("setting")}),
@@ -78,10 +89,10 @@ const MenuData = [
     },
 
     {
-        id: 4,
+        id: '4',
         list: [
             {
-                id: 1,
+                id: '1',
                 name: 'Log Out',
                 iconUri: require('../../../assets/icon/menu/cart.png'),
                 onPress: (() => {console.log("log out")}),
@@ -90,9 +101,9 @@ const MenuData = [
     },
 ]
 
-const MenuProfileScreen = () => {
+const MenuProfileScreen: FC = () => {
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
     const [layout, setLayout] = useState({
         width: 0,
@@ -136,12 +147,12 @@ const MenuProfileScreen = () => {
                     data={MenuData}
                     keyExtractor={item => item.id}
                     scrollEnabled={false}
-                    renderItem={({item}) => (
+                    renderItem={({item} : {item: MenuDataType}) => (
                         <View style={styles.viewSettingGroup}>
                            {
-                            item.list.map((item1) => {
+                            item.list.map((item1: ListData) => {
                                 return (
-                                    <MenuItem key={item1.id} detail={item1}/>
+                                    <MenuItem iconUri={item1.iconUri} name={item1.name} key={item1.id} onPress={item1.onPress}/>
                                 )
                             }) 
                            }

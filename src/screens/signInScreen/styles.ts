@@ -88,4 +88,41 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    
+    txtTitle: {
+        fontSize: 24, 
+        fontWeight: '700', 
+        color: '#32343E',
+    },
+
+    txtTitle2: {
+        fontSize: 24, 
+        fontWeight: '700', 
+        color: '#F44336',
+    },
+
+    viewInput: {
+        flex: 1,
+        height: '100%',
+        padding: 14,
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#939393',
+    },
+
+    btnForgotPassword: {
+        alignSelf: 'flex-end',
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#939393',
+        marginTop: 22,
+    },
+
+    txtOr: {
+        fontSize: 16, 
+        fontWeight: '500', 
+        color: '#000000', 
+        marginTop: 30, 
+        marginBottom: 30,
+    },
 })

@@ -2,9 +2,12 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { styles } from './styles';
 
-const Button = (props) => {
+interface IProps {
+  content: string;
+  onPress: () => void;
+}
 
-    const {content, onPress} = props;
+const Button: React.FC<IProps> = ({content, onPress}) => {
 
   return (
     <View style={styles.viewAddButton}>

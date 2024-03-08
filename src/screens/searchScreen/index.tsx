@@ -1,85 +1,111 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SearchStore } from '../../mobx/SearchStore'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { observer } from 'mobx-react'
 import SuggestedRestaurantCard from '../../components/SuggestedRestaurantCard'
 import FastFoodCard from '../../components/FastFoodCard'
 import { styles } from './styles'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const RecentKeywordData = [
+type RecentKeywordType = {
+    id: string;
+    content: string;
+}
+
+interface IRecentKeyword {
+    id: string;
+    content: string;
+}
+
+type SuggestedRestaurantType = {
+    id: string;
+    name: string;
+    imageUri: ImageSourcePropType;
+    rating: string;
+}
+
+type PopularFastFoodType = {
+    id: string;
+    title: string;
+    content: string;
+    imageUri: ImageSourcePropType;
+}
+
+const RecentKeywordData: RecentKeywordType[] = [
     {
-        id: 1,
+        id: '1',
         content: "Burger",
     },
     {
-        id: 2,
+        id: '2',
         content: "Sandwich",
     },
     {
-        id: 3,
+        id: '3',
         content: "Pizza",
     },
 ]
 
-const SuggestedRestaurantData = [
+const SuggestedRestaurantData: SuggestedRestaurantType[] = [
     {
-        id: 1,
+        id: '1',
         imageUri: require('../../../assets/food/rice.png'),
         name: 'Pansi Restaurant',
         rating: '4.7',
     },
     {
-        id: 2,
+        id: '2',
         imageUri: require('../../../assets/food/rice.png'),
         name: 'American Spicy Burger Shop',
         rating: '4.3',
     },
     {
-        id: 3,
+        id: '3',
         imageUri: require('../../../assets/food/rice.png'),
         name: 'Cafenio Coffee Club',
         rating: '4.0' ,
     },
 ]
 
-const PopularFastFoodData = [
+const PopularFastFoodData: PopularFastFoodType[] = [
     {
-        id: 1,
+        id: '1',
         title: 'European Pizza',
         content: 'Peppe Pizzeria',
         imageUri: require('../../../assets/food/pizza.png')
     },
     {
-        id: 2,
+        id: '2',
         title: 'European Pizza',
         content: 'Peppe Pizzeria',
         imageUri: require('../../../assets/food/pizza.png')
     },
     {
-        id: 3,
+        id: '3',
         title: 'European Pizza',
         content: 'Peppe Pizzeria',
         imageUri: require('../../../assets/food/pizza.png')
     },
 ]
 
-const RecentKeyword = (props) => {
+const RecentKeyword: React.FC<IRecentKeyword> = ({id, content}) => {
 
-    const {detail} = props;
     return (
         <TouchableOpacity 
             style={styles.recentKeyword}
-            onPress={() => {SearchStore.setSearchText(detail.content)}}
+            onPress={() => {SearchStore.setSearchText(content)}}
         >
-            <Text style={{fontSize: 16, fontWeight: '400', color: '#181C2E',}}>{detail.content}</Text>
+            <Text style={{fontSize: 16, fontWeight: '400', color: '#181C2E',}}>{content}</Text>
         </TouchableOpacity>
     )
 }
 
-const SearchScreen = () => {
+interface IProps {}
 
-    const navigation = useNavigation();
+const SearchScreen: React.FC<IProps>  = () => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [searchText, setSearchText] = useState("");
 
   return (
@@ -123,7 +149,7 @@ const SearchScreen = () => {
                 backgroundColor: '#181C2E',
                 borderRadius: 1000,
             }}
-            onPress={() => {navigation.navigate({name: "MyCart"})}}
+            onPress={() => {navigation.navigate('MyCart')}}
         >
             <Image style={{height: 20, width: 18,}} source={require('../../../assets/icon/cart.png')}/>
         </TouchableOpacity>
@@ -131,22 +157,10 @@ const SearchScreen = () => {
 
       <View style={styles.searchView}>
 
-        <View 
-            style={styles.searchField}
-            onPress={() => {
-                navigation.navigate({name: "Search"})
-            }}
-        >
+        <View style={styles.searchField}>
             <Image style={{width: 24, height: 24,}} source={require('../../../assets/icon/search.png')}/>
             <TextInput
-                style={{
-                    flex: 1,
-                    height: '100%',
-                    fontSize: 16,
-                    fontWeight: '400',
-                    color: '#181C2E',
-                    marginLeft: 5,
-                }}
+                style={styles.inputField}
                 placeholder='What will you like to eat?'
                 placeholderTextColor={'#979797'}
                 onChangeText={(text) => {SearchStore.setSearchText(text)}}
@@ -179,8 +193,8 @@ const SearchScreen = () => {
             data={RecentKeywordData}
             horizontal={true}
             keyExtractor={item => item.id}
-            renderItem={({item}) => (
-                <RecentKeyword detail={item}/>
+            renderItem={({item}: {item: RecentKeywordType}) => (
+                <RecentKeyword id={item.id} content={item.content}/>
             )}
             contentContainerStyle={{height: 50, alignItems: 'center', width: '100%',}}
         />

@@ -1,23 +1,35 @@
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Button, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { FC } from 'react'
 import AppIntroSlider from 'react-native-app-intro-slider'
-import { useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const slides = [
+type SlideData = {
+  id: number;
+  key: string;
+  title: string;
+  text: string;
+  image: ImageSourcePropType;
+}
+
+const slides: SlideData[] = [
     {
+      id: 1,
       key: 'slide1',
       title: 'All your favorites',
       text: 'Get all your loved foods in one once place, you just place the orer we do the rest',
       image: require('../../../assets/welcome/welcome1.png'),
     },
     {
+      id: 2,
       key: 'slide2',
       title: 'Order from choosen chef',
       text: 'Get all your loved foods in one once place, you just place the orer we do the rest',
       image: require('../../../assets/welcome/welcome2.png'),
     },
     {
+        id: 3,
         key: 'slide3',
         title: 'Free delivery offers',
         text: 'Get all your loved foods in one once place, you just place the orer we do the rest',
@@ -25,10 +37,11 @@ const slides = [
     },
   ];
 
-  const RenderSlide = ({ item }) => {
+  const renderSlide = ({item}: {item: SlideData}) => {
+    console.log('log', item)
     return (
       <View style={styles.slideContainer}>
-        <Image source={item.image} style={styles.image} />
+        <Image source={item?.image} style={styles.image} />
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text}>{item.text}</Text>
         {/* <Button title="Get Started" /> */}
@@ -36,9 +49,9 @@ const slides = [
     );
   };
 
-const WelcomeScreen = () => {
+const WelcomeScreen: FC = () => {
 
-    const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
     const RenderNextButton = () => {
         return (
@@ -60,22 +73,14 @@ const WelcomeScreen = () => {
     
     const RenderSkipButton = () => {
         return (
-            <View
-                style={{
-                    width: 306,
-                    height: 66,
-                    borderRadius: 12,
-                    backgroundColor: null,
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 15,
-                }}
+            <TouchableOpacity
+                style={styles.btnSkip}
                 onPress={() => {
-                    navigation.navigate({name: 'SignIn'})
+                  navigation.navigate('SignIn')
                 }}
             >
                 <Text style={[styles.buttonText, {color: '#000000', fontWeight: '400'}]}>Skip</Text>
-            </View>
+            </TouchableOpacity>
         );
     }
 
@@ -93,7 +98,7 @@ const WelcomeScreen = () => {
                     marginBottom: 15,
                 }}
                 onPress={() => {
-                    navigation.navigate({name: 'SignIn'})
+                    navigation.navigate('SignIn')
                 }}
             >
                 <Text style={[styles.buttonText, {color: '#FFFFFF', fontWeight: '700'}]}>DONE</Text>
@@ -104,7 +109,11 @@ const WelcomeScreen = () => {
   return (
     <AppIntroSlider
       data={slides}
-      renderItem={RenderSlide}
+      renderItem={renderSlide
+
+      }
+       
+    
       showNextButton={true}
       showDoneButton={true}
       bottomButton={true}
@@ -112,6 +121,7 @@ const WelcomeScreen = () => {
       renderNextButton={RenderNextButton}
       renderSkipButton={RenderSkipButton}
       renderDoneButton={RenderDoneButton}
+      // keyExtractor={item => item.id}
       dotStyle={{
         backgroundColor: '#FFCDD2',
         width: 8,

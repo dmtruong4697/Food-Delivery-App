@@ -136,6 +136,10 @@ export const styles = StyleSheet.create({
         height: 442,
         width: '95%',
         alignSelf: 'center',
+        justifyContent: 'space-between',
+        paddingTop: 40,
+        paddingBottom: 25,
+        alignItems: 'center',
         backgroundColor: '#E76F00',
         borderRadius: 30,
     },
@@ -159,7 +163,7 @@ export const styles = StyleSheet.create({
     },
 
     txtCode: {
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: '700',
         color: '#FFFFFF',
     },
@@ -171,10 +175,12 @@ export const styles = StyleSheet.create({
     },
 
     btnGotIt: {
-        width: '100%',
+        width: '88%',
         height: 66.19,
         borderWidth: 2,
         borderColor: '#FFFFFF',
         borderRadius: 10,
-    }
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 })
