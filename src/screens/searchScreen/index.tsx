@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import { SearchStore } from '../../mobx/SearchStore'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { observer } from 'mobx-react'
-import SuggestedRestaurantCard from '../../components/SuggestedRestaurantCard'
-import FastFoodCard from '../../components/FastFoodCard'
 import { styles } from './styles'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import FastFoodCard from '../../components/fastFoodCard'
+import SuggestedRestaurantCard from '../../components/suggestedRestaurantCard'
 
 type RecentKeywordType = {
     id: string;
@@ -18,18 +18,19 @@ interface IRecentKeyword {
     content: string;
 }
 
-type SuggestedRestaurantType = {
+type RestaurantType = {
     id: string;
     name: string;
     imageUri: ImageSourcePropType;
-    rating: string;
+    rating: number;
 }
 
-type PopularFastFoodType = {
+type FoodType = {
     id: string;
-    title: string;
-    content: string;
+    name: string;
     imageUri: ImageSourcePropType;
+    restaurantName: string;
+    price: number;
 }
 
 const RecentKeywordData: RecentKeywordType[] = [
@@ -47,45 +48,48 @@ const RecentKeywordData: RecentKeywordType[] = [
     },
 ]
 
-const SuggestedRestaurantData: SuggestedRestaurantType[] = [
+const SuggestedRestaurantData: RestaurantType[] = [
     {
         id: '1',
         imageUri: require('../../../assets/food/rice.png'),
         name: 'Pansi Restaurant',
-        rating: '4.7',
+        rating: 4.7,
     },
     {
         id: '2',
         imageUri: require('../../../assets/food/rice.png'),
         name: 'American Spicy Burger Shop',
-        rating: '4.3',
+        rating: 4.3,
     },
     {
         id: '3',
         imageUri: require('../../../assets/food/rice.png'),
         name: 'Cafenio Coffee Club',
-        rating: '4.0' ,
+        rating: 4.0,
     },
 ]
 
-const PopularFastFoodData: PopularFastFoodType[] = [
+const PopularFastFoodData: FoodType[] = [
     {
         id: '1',
-        title: 'European Pizza',
-        content: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png')
+        name: 'European Pizza',
+        restaurantName: 'Peppe Pizzeria',
+        imageUri: require('../../../assets/food/pizza.png'),
+        price: 100,
     },
     {
         id: '2',
-        title: 'European Pizza',
-        content: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png')
+        name: 'European Pizza',
+        restaurantName: 'Peppe Pizzeria',
+        imageUri: require('../../../assets/food/pizza.png'),
+        price: 100,
     },
     {
         id: '3',
-        title: 'European Pizza',
-        content: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png')
+        name: 'European Pizza',
+        restaurantName: 'Peppe Pizzeria',
+        imageUri: require('../../../assets/food/pizza.png'),
+        price: 100,
     },
 ]
 
@@ -219,7 +223,12 @@ const SearchScreen: React.FC<IProps>  = () => {
             data={SuggestedRestaurantData}
             keyExtractor={item => item.id}
             renderItem={({item}) => (
-                <SuggestedRestaurantCard detail={item}/>
+                <SuggestedRestaurantCard
+                    id={item.id}
+                    imageUri={item.imageUri}
+                    name={item.name}
+                    rating={item.rating}
+                />
             )}
             contentContainerStyle={{height: 'auto', width: '100%',}}
         />
@@ -245,7 +254,13 @@ const SearchScreen: React.FC<IProps>  = () => {
                 horizontal={true}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                    <FastFoodCard detail={item}/>
+                    <FastFoodCard
+                        id={item.id}
+                        imageUri={item.imageUri}
+                        name={item.name}
+                        price={item.price}
+                        restaurantName={item.restaurantName}
+                    />
                 )}
                 contentContainerStyle={{height: 160, alignItems: 'center', gap: 10,}}
             />

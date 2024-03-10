@@ -1,25 +1,26 @@
 import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { FC, useState } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
-import FoodCard from '../../components/FoodCard';
-import ProductItem1 from '../../components/ProductItem1';
-import FastFoodCard from '../../components/FastFoodCard';
 import { styles } from './styles';
 import Modal from "react-native-modal";
 import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import Button from '../../components/button';
 import { CartStore } from '../../mobx/CartStore';
+import FastFoodCard from '../../components/fastFoodCard';
+import FoodCard from '../../components/foodCard';
+import CategoryCard from '../../components/categoryCard';
 
 type CategoryType = {
     id: string;
     imageUri: ImageSourcePropType;
-    content: string;
+    name: string;
+    onPress: () => void;
 }
 
 type RestaurantType = {
     id: string,
     imageUri: ImageSourcePropType,
-    productName: string,
+    name: string,
     price: number,
     rating: number,
     isFavorite: boolean,
@@ -37,27 +38,32 @@ const CategoriesData: CategoryType[] = [
     {
         id: '1',
         imageUri: require('../../../assets/food/burger.png'),
-        content: 'Burger',
+        name: 'Burger',
+        onPress: () => {console.log('burger')},
     },
     {
         id: '2',
         imageUri: require('../../../assets/food/pizza.png'),
-        content: 'Pizza',
+        name: 'Pizza',
+        onPress: () => {console.log('pizza')},
     },
     {
         id: '3',
         imageUri: require('../../../assets/food/burger.png'),
-        content: 'Burger',
+        name: 'Burger',
+        onPress: () => {console.log('burger')},
     },
     {
         id: '4',
         imageUri: require('../../../assets/food/pizza.png'),
-        content: 'Pizza',
+        name: 'Pizza',
+        onPress: () => {console.log('pizza')},
     },
     {
         id: '5',
         imageUri: require('../../../assets/food/burger.png'),
-        content: 'Burger',
+        name: 'Burger',
+        onPress: () => {console.log('burger')},
     },
 ]
 
@@ -65,7 +71,7 @@ const OpenRestaurantData: RestaurantType[] = [
     {
         id: '1',
         imageUri: require('../../../assets/food/burger.png'),
-        productName: "Cheese burgers",
+        name: "Cheese burgers",
         price: 8.09,
         rating: 4.2,
         isFavorite: false,
@@ -73,7 +79,7 @@ const OpenRestaurantData: RestaurantType[] = [
     {
         id: '2',
         imageUri: require('../../../assets/food/pizza.png'),
-        productName: "Pizza",
+        name: "Pizza",
         price: 12.5,
         rating: 4.6,
         isFavorite: false,
@@ -81,7 +87,7 @@ const OpenRestaurantData: RestaurantType[] = [
     {
         id: '3',
         imageUri: require('../../../assets/food/burger.png'),
-        productName: "Cheese burgers",
+        name: "Cheese burgers",
         price: 8.09,
         rating: 4.2,
         isFavorite: false,
@@ -189,7 +195,12 @@ const HomeScreen: FC = () => {
                 horizontal={true}
                 // keyExtractor={(item) => item.id}
                 renderItem={({item}: {item: CategoryType}) => (
-                    <ProductItem1 content={item.content} imageUri={item.imageUri}/>
+                    <CategoryCard
+                        id={item.id}
+                        imageUri={item.imageUri}
+                        name={item.name}
+                        onPress={item.onPress}
+                    />
                 )}
                 contentContainerStyle={{height: 70, alignItems: 'center',}}
             />
@@ -215,7 +226,14 @@ const HomeScreen: FC = () => {
                 horizontal={true}
                 // keyExtractor={item => item.id}
                 renderItem={({item}: {item: RestaurantType}) => (
-                    <FoodCard detail={item}/>
+                    <FoodCard
+                        id={item.id}
+                        imageUri={item.imageUri}
+                        isFavorite={item.isFavorite}
+                        name={item.name}
+                        price={item.price}
+                        rating={item.rating}
+                    />
                 )}
                 contentContainerStyle={{height: 150,}}
             />
@@ -234,10 +252,15 @@ const HomeScreen: FC = () => {
                 data={PopularFastFoodData}
                 horizontal={true}
                 // keyExtractor={item => item.id}
-                renderItem={({item}: {item: FoodType}) => {
-                    return (<FastFoodCard detail={item}/>)
-                    
-                }}
+                renderItem={({item}: {item: FoodType}) => (
+                    <FastFoodCard 
+                        id={item.id}
+                        imageUri={item.imageUri}
+                        name={item.name}
+                        price={item.price}
+                        restaurantName={item.restaurantName}
+                    />
+                )}
                 contentContainerStyle={{height: 160, alignItems: 'center', gap: 10,}}
             />
 

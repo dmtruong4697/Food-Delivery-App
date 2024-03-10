@@ -7299,7 +7299,7 @@ react-native-raw-bottom-sheet@^2.2.1:
   resolved "https://registry.npmjs.org/react-native-raw-bottom-sheet/-/react-native-raw-bottom-sheet-2.2.1.tgz"
   integrity sha512-9MkumyiXEmtSx01cTYOzauUXPRckLSQP1DrRc9zq7TMqtcKk0n67tMyzy8qsrgEPLs63+Kjr/eJc6PlaSgpZ5g==
 
-react-native-reanimated@*, react-native-reanimated@^3.7.2, react-native-reanimated@>=2.2.0:
+react-native-reanimated@*, react-native-reanimated@>=2.2.0:
   version "3.7.2"
   resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.7.2.tgz"
   integrity sha512-3KpTmYEcmHhkZeTqgWtioqnljpd4TLxKHClvarYsA3UXU2Tv+O1gqlRhVhfHBZuiDngVu436gWkde9+/VQVMFQ==
