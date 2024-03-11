@@ -9,6 +9,7 @@ import { CartStore } from '../../mobx/CartStore';
 import FastFoodCard from '../../components/fastFoodCard';
 import FoodCard from '../../components/foodCard';
 import CategoryCard from '../../components/categoryCard';
+import { observer } from "mobx-react-lite"
 
 type CategoryType = {
     id: string;
@@ -149,8 +150,12 @@ const HomeScreen: FC = () => {
             style={styles.btnCart}
             onPress={() => {navigation.navigate('MyCart')}}
         >
+            {(CartStore.getQuantity() > 0) && 
+                <View style={styles.viewCartQuantity}>
+                    <Text style={{color: 'white'}}>{CartStore.getQuantity()}</Text>
+                </View>
+            }
             <Image style={styles.imgButtonCart} source={require('../../../assets/icon/cart.png')}/>
-            <Text style={{color: 'white'}}>{CartStore.getQuantity()}</Text>
         </TouchableOpacity>
       </View>
 
@@ -299,4 +304,4 @@ const HomeScreen: FC = () => {
   )
 }
 
-export default HomeScreen
+export default observer(HomeScreen)

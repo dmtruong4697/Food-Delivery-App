@@ -5,6 +5,7 @@ import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Modal from "react-native-modal";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import FoodDetailCard from '../../components/foodDetailCard'
+import { CartStore } from '../../mobx/CartStore';
 
 type DishItemType = {
     id: string;
@@ -256,7 +257,7 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
                         }]}
                         onPress={() => {setDishIndex(item.id)}}
                     >
-                        <Text style={[styles.txtButtonDish, {color: (item.id == dishIndex)? '#FFFFFF':'#181C2E'}]}>{item.name}</Text>
+                        <Text style={[styles.txtButtonDish, {color: (Number(item.id) == dishIndex)? '#FFFFFF':'#181C2E'}]}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
                 // contentContainerStyle={{width: '100%',}}
@@ -282,6 +283,10 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
                         name={item.name}
                         price={item.price}
                         restaurantName={item.restaurantName}
+                        onPressAdd={() => {
+                            CartStore.addItem({...item, quantity: 1}, 1);
+                            console.log(CartStore)
+                        }}
                     />
                 )}
                 contentContainerStyle={{flex: 1, width: layout.width,  gap: 10, alignItems: 'center',}}

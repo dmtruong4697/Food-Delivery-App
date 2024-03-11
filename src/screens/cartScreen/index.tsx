@@ -5,6 +5,9 @@ import { styles } from './styles'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Button from '../../components/button'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { CartStore } from '../../mobx/CartStore'
+import { observer } from "mobx-react-lite"
+import { toJS } from 'mobx'
 
 type CartDataType = {
   id: string;
@@ -51,9 +54,18 @@ const CartScreen: FC = () => {
       <View style={styles.viewItemList}>
         <FlatList
           nestedScrollEnabled
-          data={cartData}
-          renderItem={({item}: {item: CartDataType}) => (
-            <CartItem name={item.name} price={item.price} quantity={item.quantity}/>
+          data={CartStore.items}
+          extraData={toJS(CartStore.items)}
+          renderItem={({item}) => (
+            <CartItem 
+              id={item.id}
+              name={item.name} 
+              price={item.price} 
+              quantity={item.quantity} 
+              onPressRemove={() => {CartStore.removeItemById(item.id)}}
+              onPressDecrease={() => {CartStore.decreaseQuantity(item.id)}}
+              onPressIncrease={() => CartStore.increaseQuantity(item.id)}
+            />
           )}
           keyExtractor={item => item.id}
           contentContainerStyle={{height: 'auto'}}
@@ -65,7 +77,9 @@ const CartScreen: FC = () => {
           <View style={styles.viewAddressEdit}>
             <Text style={styles.txtAddressEdit}>DELIVERY ADDRESS</Text>
 
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {navigation.navigate('Tracker')}}
+            >
               <Text style={styles.txtAddressEditButton}>EDIT</Text>
             </TouchableOpacity>
           </View>
@@ -75,7 +89,7 @@ const CartScreen: FC = () => {
           <View style={styles.viewTotal}>
             <View style={{flexDirection: 'row', alignItems: 'center',}}>
               <Text style={styles.txtTotal}>TOTAL:</Text>
-              <Text style={styles.txtPrice}> $96</Text>
+              <Text style={styles.txtPrice}>${CartStore.total}</Text>
             </View>
 
             <TouchableOpacity>
@@ -91,4 +105,4 @@ const CartScreen: FC = () => {
   )
 }
 
-export default CartScreen
+export default observer(CartScreen)

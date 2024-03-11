@@ -4,6 +4,9 @@ import { styles } from './styles'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Button from '../../components/button'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { CartStore } from '../../mobx/CartStore'
+import { observer } from 'mobx-react'
+import { CardStore } from '../../mobx/CardStore'
 
 type MethodItemType = {
     id: string;
@@ -112,7 +115,7 @@ const PaymentScreen: FC = () => {
 
       <View style={styles.viewCardList}>
         {
-            (MethodData[Number(methodIndex)-1].list.length == 0 && MethodData[Number(methodIndex)-1].name != "Cash")?
+            (CardStore.getCardListByType(MethodData[Number(methodIndex)-1].name)?.length == 0 && MethodData[Number(methodIndex)-1].name != "Cash")?
             <View style={styles.viewNocard}>
                 <Image style={styles.imgNocard} source={require('../../../assets/image/nocard.png')}/>
                 <Text style={styles.txtCardTitle}>No {MethodData[Number(methodIndex)-1].name} card added</Text>
@@ -120,13 +123,14 @@ const PaymentScreen: FC = () => {
             </View>
             :
                 <FlatList
-                    data={MethodData[Number(methodIndex)-1].list}
+                    // data={MethodData[Number(methodIndex)-1].list}
+                    data={CardStore.getCardListByType(MethodData[Number(methodIndex)-1].name)}
                     keyExtractor={item => item.id}
-                    renderItem={({item}: {item: MethodItemType}) => (
+                    renderItem={({item}) => (
                         <View style={styles.viewCard}>
                             <View style={styles.viewCardInfo}>
-                                <Text style={styles.txtCardTitle}>{item.name}</Text>
-                                <Text style={styles.txtCard}>{item.number}</Text>
+                                <Text style={styles.txtCardTitle}>{item.type}</Text>
+                                <Text style={styles.txtCard}>{item.cardNumber}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -143,7 +147,7 @@ const PaymentScreen: FC = () => {
         {(MethodData[Number(methodIndex)-1].name != "Cash") &&
             <TouchableOpacity
                 style={styles.btnAddNew}
-                onPress={() => {navigation.navigate('AddCard')}}
+                onPress={() => {navigation.navigate('AddCard', {type: MethodData[Number(methodIndex)-1].name})}}
             >
                 <Text style={styles.txtAddnew}>+ ADD NEW</Text>
             </TouchableOpacity>
@@ -153,7 +157,7 @@ const PaymentScreen: FC = () => {
       <View style={styles.viewFooter}>
         <View style={styles.viewTotal}>
             <Text style={styles.txtTotal}>TOTAL:</Text>
-            <Text style={styles.txtPrice}> $96</Text>
+            <Text style={styles.txtPrice}> ${CartStore.total}</Text>
         </View>
 
         <Button content={'PAY & CONFIRM'} onPress={() => {navigation.navigate('PaymentSuccessfull')}}/>
@@ -163,4 +167,4 @@ const PaymentScreen: FC = () => {
   )
 }
 
-export default PaymentScreen
+export default observer(PaymentScreen)

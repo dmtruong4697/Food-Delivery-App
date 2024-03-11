@@ -24,9 +24,9 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './src/navigator/MainNavigator';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -66,9 +66,11 @@ function App(): React.JSX.Element {
   };
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <NavigationContainer>
       <MainNavigator/>
     </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

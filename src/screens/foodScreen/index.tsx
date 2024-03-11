@@ -5,6 +5,7 @@ import { styles } from './style';
 import RestaurantCard from '../../components/restaurantCard';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FoodDetailCard from '../../components/foodDetailCard';
+import { CartStore } from '../../mobx/CartStore';
 
 type FoodDataType = {
     id: string;
@@ -144,6 +145,10 @@ const FoodScreen: React.FC<IProps> = () => {
                         name={item.name}
                         price={item.price}
                         restaurantName={item.restaurantName}
+                        onPressAdd={() => {
+                            CartStore.addItem({...item, quantity: 1}, 1);
+                            console.log(CartStore)
+                        }}
                     />
                 )}
                 contentContainerStyle={{flex: 1, width: layout.width, gap: 10, alignItems: 'center',}}

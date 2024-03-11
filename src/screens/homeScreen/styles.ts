@@ -91,6 +91,19 @@ export const styles = StyleSheet.create({
         width: 18,
     },
 
+    viewCartQuantity: {
+        height: 25,
+        width: 25,
+        borderRadius: 1000,
+        backgroundColor: '#FF7622',
+        position: 'absolute',
+        top: -5,
+        right: 0,
+        zIndex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
     viewInputField: {
         height: '100%',
         fontSize: 16,

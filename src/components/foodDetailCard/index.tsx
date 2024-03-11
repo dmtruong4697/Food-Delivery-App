@@ -10,16 +10,26 @@ interface IProps {
     imageUri: ImageSourcePropType;
     restaurantName: string;
     price: number;
+    onPressAdd: () => void;
 }
 
-const FoodDetailCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantName}) => {
+const FoodDetailCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantName, onPressAdd}) => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   return (
     <TouchableOpacity 
         style={styles.viewContainer}
-        onPress={() => {navigation.navigate('FoodDetail')}}
+        onPress={() => {navigation.navigate('FoodDetail', 
+        {
+            detail: {
+                id: id,
+                imageUri: imageUri,
+                name: name,
+                price: price,
+                restaurantName: restaurantName,
+            },
+        })}}
     >
         
         <View style={styles.imgImage}>
@@ -34,6 +44,7 @@ const FoodDetailCard: React.FC<IProps> = ({id, imageUri, name, price, restaurant
                     <Text style={styles.txtPrice}>${price}</Text>
                     <TouchableOpacity
                         style={styles.btnAdd}
+                        onPress={onPressAdd}
                     >
                         <Image style={styles.imgAdd} source={require('../../../assets/icon/plus.png')}/>
                     </TouchableOpacity>

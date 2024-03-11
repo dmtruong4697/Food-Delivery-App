@@ -1,10 +1,11 @@
-import { FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { FlatList, Image, ImageBackground, ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useState } from 'react'
 import { styles } from './style'
-import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation, useRoute } from '@react-navigation/native'
 import Modal from "react-native-modal";
 import Button from '../../components/button';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CartStore } from '../../mobx/CartStore';
 
 type SizeDataType = {
     id: string;
@@ -26,9 +27,27 @@ const sizeData: SizeDataType[] = [
     }
 ]
 
-interface IProps {}
+interface IProps {
+    // id: string;
+    // name: string;
+    // imageUri: ImageSourcePropType;
+    // restaurantName: string;
+    // price: number;
+    // onPressAdd: () => void;
+}
 
 const FoodDetailScreen: React.FC<IProps> = () => {
+
+    const route = useRoute();
+    const {detail} = route.params as {
+        detail: {
+            id: string,
+            imageUri: ImageSourcePropType,
+            name: string,
+            price: number,
+            restaurantName: string,
+        },
+    };
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [sizeIndex, setSizeIndex] = useState(0);
@@ -72,11 +91,11 @@ const FoodDetailScreen: React.FC<IProps> = () => {
         onPress={() => {navigation.navigate('RestaurantDetail')}}
       >
         <Image style={styles.imgRestaurantButton} source={require('../../../assets/food/burger.png')}/>
-        <Text style={styles.txtRestaurantButton}>Uttora Coffe House</Text>
+        <Text style={styles.txtRestaurantButton}>{detail.restaurantName}</Text>
       </TouchableOpacity>
 
         <View style={styles.viewContent}>
-            <Text style={styles.txtName}>Chicken & Chips</Text>
+            <Text style={styles.txtName}>{detail.name}</Text>
             <Text style={styles.txtDescription}>Prosciutto e funghi is a pizza variety that is topped with tomato sauce.</Text>
 
             <View style={styles.viewInfo}>
@@ -126,7 +145,7 @@ const FoodDetailScreen: React.FC<IProps> = () => {
             style={styles.viewModal}
         >
             <View style={styles.viewPrice}>
-                <Text style={styles.txtPrice}>$32</Text>
+                <Text style={styles.txtPrice}>${detail.price*quantity}</Text>
                 <View style={styles.viewNumberInput}>
                     <TouchableOpacity
                         style={styles.btnNumberInput}
@@ -146,7 +165,7 @@ const FoodDetailScreen: React.FC<IProps> = () => {
                 </View>
             </View>
 
-            <Button onPress={() => {console.log('Add to cart')}} content={'ADD TO CART'}/>
+            <Button onPress={() => {CartStore.addItem(detail, quantity)}} content={'ADD TO CART'}/>
         </Modal>
 
     </ScrollView>
