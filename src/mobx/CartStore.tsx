@@ -5,8 +5,9 @@ import { ImageSourcePropType } from 'react-native';
 type Item = {
     id: string;
     name: string;
+    type: string,
     restaurantName: string;
-    imageUri: ImageSourcePropType;
+    imageUri: string;
     price: number;
     quantity: number;
 }
@@ -14,8 +15,9 @@ type Item = {
 type ItemAdd = {
     id: string;
     name: string;
+    type: string;
     restaurantName: string;
-    imageUri: ImageSourcePropType;
+    imageUri: string;
     price: number;
 }
 

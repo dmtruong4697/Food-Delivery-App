@@ -7,7 +7,7 @@ type Card = {
     type: string,
     cardHolderName: string;
     cardNumber: string;
-    expireDate: Date;
+    expireDate: string;
     cvc: string;
 }
 

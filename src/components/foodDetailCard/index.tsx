@@ -7,7 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 interface IProps {
     id: string;
     name: string;
-    imageUri: ImageSourcePropType;
+    imageUri: string;
     restaurantName: string;
     price: number;
     onPressAdd: () => void;

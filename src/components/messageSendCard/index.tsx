@@ -1,5 +1,5 @@
-import { View, Text, Image, ImageSourcePropType } from 'react-native'
-import React from 'react'
+import { View, Text, Image, ImageSourcePropType, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import { styles } from './styles'
 
 type UserType = {
@@ -18,16 +18,22 @@ interface IProps {
 }
 
 const MessageSendCard: React.FC<IProps> = ({id, content, createAt, hasSeen, receiver, sender}) => {
+
+    const [isShowTime, setIsShowTime] = useState(false);
+
   return (
     <View style={styles.viewContainer}>
         <View style={{flex: 1}}></View>
         <View style={styles.viewContentContainer}>
-            <Text style={styles.txtTime}>{createAt}</Text>
+            {(isShowTime) && <Text style={styles.txtTime}>{createAt}</Text>}
             <View style={styles.viewContent}>
                 {(hasSeen == true) && <Image style={styles.imgSeen} source={require('../../../assets/icon/seen.png')}/>}
-                <View style={styles.viewMessage}>
+                <TouchableOpacity
+                    style={styles.viewMessage}
+                    onPress={() => {setIsShowTime(!isShowTime)}}
+                >
                     <Text style={styles.txtMessage}>{content}</Text>
-                </View>
+                </TouchableOpacity>
                 <Image style={styles.imgAvatar} source={sender.imageUri}/>
             </View>
         </View>

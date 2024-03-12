@@ -69,7 +69,7 @@ const AddCardScreen: React.FC<IProps> = () => {
                   value={value}
                 />
               )}
-              name='holderName'
+              name='cardHolderName'
               rules={{
                 required: true,
               }}

@@ -1,16 +1,18 @@
 import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { styles } from './style';
 import RestaurantCard from '../../components/restaurantCard';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FoodDetailCard from '../../components/foodDetailCard';
 import { CartStore } from '../../mobx/CartStore';
+import { getFoodData } from '../../firebase/services/FoodService';
 
-type FoodDataType = {
+type FoodType = {
     id: string;
+    type: string,
     name: string;
-    imageUri: ImageSourcePropType;
+    imageUri: string;
     restaurantName: string;
     price: number;
 }
@@ -25,10 +27,11 @@ type RestaurantDataType = {
     rating: string;
 }
 
-const FoodData: FoodDataType[] = [
+let FoodData: FoodType[] = [
     {
         id: '1',
         name: 'Burger Bistro',
+        type: 'Burger',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: 40,
@@ -36,6 +39,7 @@ const FoodData: FoodDataType[] = [
     {
         id: '2',
         name: 'Burger Bistro',
+        type: 'Pizza',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: 40,
@@ -43,6 +47,7 @@ const FoodData: FoodDataType[] = [
     {
         id: '3',
         name: 'Burger Bistro',
+        type: 'Pizza',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: 40,
@@ -50,6 +55,7 @@ const FoodData: FoodDataType[] = [
     {
         id: '4',
         name: 'Burger Bistro',
+        type: 'Burger',
         imageUri: require('../../../assets/food/burger1.png'),
         restaurantName: 'Rose garden',
         price: 400,
@@ -86,6 +92,11 @@ const FoodScreen: React.FC<IProps> = () => {
         width: 0,
         height: 0,
       });
+
+    useEffect(() => {
+        const data = getFoodData();
+        FoodData = data;
+    }, []);
 
   return (
     <ScrollView
@@ -146,7 +157,7 @@ const FoodScreen: React.FC<IProps> = () => {
                         price={item.price}
                         restaurantName={item.restaurantName}
                         onPressAdd={() => {
-                            CartStore.addItem({...item, quantity: 1}, 1);
+                            CartStore.addItem({...item}, 1);
                             console.log(CartStore)
                         }}
                     />

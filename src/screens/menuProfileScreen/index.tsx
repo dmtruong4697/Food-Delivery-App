@@ -4,6 +4,11 @@ import { styles } from './styles'
 import MenuItem from '../../components/menuItem'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { initializeApp } from 'firebase/app'
+import { firebaseConfig } from '../../firebase/config'
+import { getDatabase, ref, remove } from '@firebase/database'
+import { UserStore } from '../../mobx/UserStore'
+import { logout } from '../../firebase/services/AuthService'
 
 type ListData = {
     id: string;
@@ -95,11 +100,22 @@ const MenuData: MenuDataType[] = [
                 id: '1',
                 name: 'Log Out',
                 iconUri: require('../../../assets/icon/menu/cart.png'),
-                onPress: (() => {console.log("log out")}),
+                onPress: (() => {
+                    console.log("log out");
+                    logout();
+                }),
             },  
         ]
     },
 ]
+
+// const logout = async() => {
+//     const app = initializeApp(firebaseConfig);
+//     // const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+//     const database = getDatabase(app);
+
+//     await remove(ref(database, 'activeUser/' + UserStore.getCurrentUser().uid));
+// }
 
 const MenuProfileScreen: FC = () => {
 

@@ -132,12 +132,12 @@ export const styles = StyleSheet.create({
 
     viewCard: {
         width: 340,
-        height: 78,
+        // height: 78,
         backgroundColor: '#F0F5FA',
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row',
+        flexDirection: 'column',
         padding: 15,
     },
 

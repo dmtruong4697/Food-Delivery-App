@@ -82,4 +82,13 @@ export const styles = StyleSheet.create({
         width: 31.32,
         height: 31.32,
     },
+
+    ring: {
+        position: "absolute",
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        borderColor: "tomato",
+        borderWidth: 10,
+    },
 })

@@ -7,7 +7,7 @@ import { styles } from './styles';
 interface IProps {
     id: string;
     name: string;
-    imageUri: ImageSourcePropType;
+    imageUri: string;
     restaurantName: string;
     price: number;
 }
@@ -22,7 +22,7 @@ const FastFoodCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantNa
       style={styles.viewContainer}
       onPress={() => {navigation.navigate('Food')}}
     >
-      <Image style={styles.imgImage} source={imageUri}/>
+      <Image style={styles.imgImage} source={{uri: imageUri}}/>
 
       <View style={styles.viewContent}>
         <Text style={styles.txtTitle}>{name}</Text>

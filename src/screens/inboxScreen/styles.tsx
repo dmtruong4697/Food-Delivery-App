@@ -47,6 +47,7 @@ export const styles = StyleSheet.create({
     viewMessage: {
         width: '100%',
         padding: 10,
+        // backgroundColor: 'pink',
     },
 
     viewInput: {

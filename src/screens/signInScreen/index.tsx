@@ -3,12 +3,63 @@ import React, { FC, useState } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { styles } from './styles'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { initializeApp } from 'firebase/app'
+import { firebaseConfig } from '../../firebase/config'
+import { UserStore } from '../../mobx/UserStore'
+import { getDatabase, ref, set } from '@firebase/database'
+
+type User = {
+    uid: string;
+    userEmail: string | null,
+    phoneNumber: string | null,
+    photoURL: string | null,
+    displayName: string | null,
+    token: string,
+    refreshToken: string,
+    expirationTime: number,
+}
 
 const SignInScreen: FC = () => {
+
+    const app = initializeApp(firebaseConfig);
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
     const [isShowPassword, setIsShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const signIn = () => {
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+            signInWithEmailAndPassword(auth, email, password)
+            .then(async(userCredential) => {
+                // Signed in 
+                // const user = userCredential.user;
+                const user: User = {
+                    uid: userCredential.user.uid,
+                    userEmail: userCredential.user.email,
+                    phoneNumber: userCredential.user.phoneNumber,
+                    photoURL: userCredential.user.photoURL,
+                    displayName: userCredential.user.displayName,
+                    token: userCredential.user.stsTokenManager.accessToken,
+                    expirationTime: userCredential.user.stsTokenManager.expirationTime,
+                    refreshToken: userCredential.user.stsTokenManager.refreshToken,
+                }
+
+                await set(ref(database, 'activeUser/' + user.uid), user);
+
+                UserStore.setCurrentUser(user);
+                console.log(user);
+                navigation.navigate('Home');
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
+    }
 
   return (
     <View style={styles.container}>
@@ -44,6 +95,7 @@ const SignInScreen: FC = () => {
                     placeholder='email'
                     placeholderTextColor={'#939393'}
                     style={styles.viewInput}
+                    onChangeText={(text) => {setEmail(text)}}
                 />
             </View>
         </View>
@@ -56,6 +108,7 @@ const SignInScreen: FC = () => {
                     placeholderTextColor={'#939393'}
                     secureTextEntry={isShowPassword}
                     style={styles.viewInput}
+                    onChangeText={(text) => {setPassword(text)}}
                 />
                 <TouchableOpacity
                     onPress={() => {setIsShowPassword(!isShowPassword)}}
@@ -78,7 +131,8 @@ const SignInScreen: FC = () => {
         <TouchableOpacity
             style={styles.signInButton}
             onPress={() => {
-                navigation.navigate('Home')
+                // navigation.navigate('Home')
+                signIn();
             }}
         >
             <Text style={{fontSize: 16, fontWeight: '700', color: '#FFFFFF'}}

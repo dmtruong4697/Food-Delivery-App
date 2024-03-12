@@ -20,6 +20,15 @@ type MethodDataType = {
     imageUri: ImageSourcePropType;
     list: MethodItemType[];
 }
+type Card = {
+    id: string,
+    type: string,
+    cardHolderName: string;
+    cardNumber: string;
+    expireDate: string;
+    cvc: string;
+}
+
 const MethodData: MethodDataType[] = [
     {
         id: '1',
@@ -72,6 +81,40 @@ const PaymentScreen: FC = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [methodIndex, setMethodIndex] = useState('1');
+
+    const CardItem = (item: Card) => {
+
+        const [isShowInfo, setIsShowInfo] = useState(false);
+        return (
+            <TouchableOpacity 
+                style={styles.viewCard}
+                onPress={() => {
+                    // console.log(item);
+                    setIsShowInfo(!isShowInfo);
+                }}
+            >
+                <View style={{width: '100%', flexDirection: 'row',}}>
+                    <View style={styles.viewCardInfo}>
+                        <Text style={styles.txtCardTitle}>{item.type}</Text>
+                        <Text style={styles.txtCard}>{item.cardNumber}</Text>
+                    </View>
+
+                    <View
+                        style={styles.btnCardDown}
+                    >
+                        <Text>▼</Text>
+                    </View>
+                </View>
+
+                {(isShowInfo) && 
+                    <View style={{width: '100%', flexDirection: 'column'}}>
+                        <Text>Holder Name: {item.cardHolderName}</Text>
+                        <Text>Expire Date: {item.expireDate}</Text>
+                    </View>
+                }
+            </TouchableOpacity>
+        )
+    }
 
   return (
     <View style={styles.viewContainer}>
@@ -127,18 +170,14 @@ const PaymentScreen: FC = () => {
                     data={CardStore.getCardListByType(MethodData[Number(methodIndex)-1].name)}
                     keyExtractor={item => item.id}
                     renderItem={({item}) => (
-                        <View style={styles.viewCard}>
-                            <View style={styles.viewCardInfo}>
-                                <Text style={styles.txtCardTitle}>{item.type}</Text>
-                                <Text style={styles.txtCard}>{item.cardNumber}</Text>
-                            </View>
-
-                            <TouchableOpacity
-                                style={styles.btnCardDown}
-                            >
-                                <Text>▼</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <CardItem 
+                            cardHolderName={item.cardHolderName}
+                            cardNumber={item.cardNumber}
+                            expireDate={item.expireDate}
+                            id={item.id}
+                            type={item.type}
+                            cvc={item.cvc}
+                        />
                     )}
                     contentContainerStyle={{width: 340, gap: 10, justifyContent: 'center', alignItems: 'center',}}
                 />

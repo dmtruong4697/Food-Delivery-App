@@ -1,5 +1,5 @@
 import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { styles } from './styles';
 import Modal from "react-native-modal";
@@ -10,6 +10,7 @@ import FastFoodCard from '../../components/fastFoodCard';
 import FoodCard from '../../components/foodCard';
 import CategoryCard from '../../components/categoryCard';
 import { observer } from "mobx-react-lite"
+import { getFoodData } from '../../firebase/services/FoodService';
 
 type CategoryType = {
     id: string;
@@ -29,8 +30,9 @@ type RestaurantType = {
 
 type FoodType = {
     id: string;
+    type: string,
     name: string;
-    imageUri: ImageSourcePropType;
+    imageUri: string;
     restaurantName: string;
     price: number;
 }
@@ -95,26 +97,29 @@ const OpenRestaurantData: RestaurantType[] = [
     },
 ]
 
-const PopularFastFoodData: FoodType[] = [
+let PopularFastFoodData: FoodType[] = [
     {
         id: '1',
         name: 'European Pizza',
+        type: 'Pizza',
         restaurantName: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png'),
+        imageUri: "",
         price: 100,
     },
     {
         id: '2',
         name: 'European Pizza',
+        type: 'Burger',
         restaurantName: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png'),
+        imageUri: "",
         price: 100,
     },
     {
         id: '3',
         name: 'European Pizza',
+        type: 'Pizza',
         restaurantName: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png'),
+        imageUri: "",
         price: 100,
     },
 ]
@@ -123,6 +128,11 @@ const HomeScreen: FC = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [isShowModal, setIsShowModal] = useState(false);
+
+    useEffect(() => {
+        const data = getFoodData();
+        PopularFastFoodData = data;
+    }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
