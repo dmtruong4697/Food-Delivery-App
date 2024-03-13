@@ -3,28 +3,26 @@ import { getDatabase, onValue, ref } from "firebase/database";
 import { firebaseConfig } from "../config";
 import { ImageSourcePropType } from "react-native";
 
-type FoodType = {
+type RestaurantType = {
     id: string;
-    type: string,
     name: string;
+    description: string,
     imageUri: string;
-    restaurantName: string;
-    restaurantId: string,
-    price: number;
+    rating: number;
 }
 
-export async function getFoodData(): Promise<FoodType[]> {
+export async function getRestaurantData(): Promise<RestaurantType[]> {
     try {
       const app = initializeApp(firebaseConfig);
       const database = getDatabase(app);
   
-      const foodDataRef = ref(database, 'foods/');
+      const restaurantDataRef = ref(database, 'restaurants/');
 
       return new Promise((resolve, reject) => {
-        onValue(foodDataRef, (snapshot) => {
+        onValue(restaurantDataRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
-            const response: FoodType[] = Object.values(data);
+            const response: RestaurantType[] = Object.values(data);
             // console.log(response);
             resolve(response);
           } else {
@@ -36,20 +34,4 @@ export async function getFoodData(): Promise<FoodType[]> {
     } catch (error) {
       throw error;
     }
-    // return [] as FoodType[];
-}
-
-export async function searchFoodByType(type: string): Promise<FoodType[]> {
-  try {
-    const foodData = await getFoodData();
-    
-    return foodData.filter((Item: FoodType) => {
-      return Item.type == type;
-    })
-
-  } catch (error) {
-    throw error;
   }
-}
-
-

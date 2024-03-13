@@ -1,12 +1,13 @@
 import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { ParamListBase, useNavigation, useRoute } from '@react-navigation/native';
 import { styles } from './style';
 import RestaurantCard from '../../components/restaurantCard';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FoodDetailCard from '../../components/foodDetailCard';
 import { CartStore } from '../../mobx/CartStore';
-import { getFoodData } from '../../firebase/services/FoodService';
+import { getFoodData, searchFoodByType } from '../../firebase/services/FoodService';
+import { getRestaurantData } from '../../firebase/services/RestaurantService';
 
 type FoodType = {
     id: string;
@@ -14,89 +15,64 @@ type FoodType = {
     name: string;
     imageUri: string;
     restaurantName: string;
+    restaurantId: string,
     price: number;
 }
 
-type RestaurantDataType = {
+type RestaurantType = {
     id: string;
     name: string;
-    imageUri: ImageSourcePropType;
-    description: string;
-    shipping: string;
-    time: string;
-    rating: string;
+    description: string,
+    imageUri: string;
+    rating: number;
 }
-
-let FoodData: FoodType[] = [
-    {
-        id: '1',
-        name: 'Burger Bistro',
-        type: 'Burger',
-        imageUri: require('../../../assets/food/burger1.png'),
-        restaurantName: 'Rose garden',
-        price: 40,
-    },
-    {
-        id: '2',
-        name: 'Burger Bistro',
-        type: 'Pizza',
-        imageUri: require('../../../assets/food/burger1.png'),
-        restaurantName: 'Rose garden',
-        price: 40,
-    },
-    {
-        id: '3',
-        name: 'Burger Bistro',
-        type: 'Pizza',
-        imageUri: require('../../../assets/food/burger1.png'),
-        restaurantName: 'Rose garden',
-        price: 40,
-    },
-    {
-        id: '4',
-        name: 'Burger Bistro',
-        type: 'Burger',
-        imageUri: require('../../../assets/food/burger1.png'),
-        restaurantName: 'Rose garden',
-        price: 400,
-    },
-]
-
-const RestaurantData: RestaurantDataType[] = [
-    {
-        id: '1',
-        imageUri: require('../../../assets/image/restaurant.png'),
-        name: 'Rose Garden Restaurant',
-        description: 'Burger - Chicken - Wings',
-        rating: '4.7',
-        shipping: 'Free',
-        time: '20 min',
-    },
-    {
-        id: '2' ,
-        imageUri: require('../../../assets/image/restaurant.png'),
-        name: 'Rose Garden Restaurant',
-        description: 'Burger - Chicken - Wings',
-        rating: '4.7',
-        shipping: 'Free',
-        time: '20 min',
-    },
-]
 
 interface IProps {}
 
 const FoodScreen: React.FC<IProps> = () => {
 
+    const route = useRoute();
+    const {detail} = route.params as {
+        detail: {
+            type: string,
+        },
+    };
+
+
+    const [currentType, setCurrentType] = useState(detail.type);
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [layout, setLayout] = useState({
         width: 0,
         height: 0,
       });
 
-    useEffect(() => {
-        const data = getFoodData();
-        FoodData = data;
-    }, []);
+    const [foodData, setFoodData] = useState<FoodType[]>([]);
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await searchFoodByType(currentType);
+            setFoodData(data);
+          } catch (error) {
+            console.error('Error fetching food data:', error);
+          }
+        };
+    
+        fetchData();
+      }, []);
+
+      const [restaurantData, setRestaurantData] = useState<RestaurantType[]>([]);
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await getRestaurantData();
+            setRestaurantData(data);
+          } catch (error) {
+            console.error('Error fetching restaurant data:', error);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
   return (
     <ScrollView
@@ -119,7 +95,7 @@ const FoodScreen: React.FC<IProps> = () => {
                 style={styles.btnSelectMenu}
             >
                 <Text style={styles.txtSelectMenu}>
-                    BURGER
+                    {detail.type}
                     <Text style={{color: '#F58D1D',}}>▼</Text>
                 </Text>
             </TouchableOpacity>
@@ -140,13 +116,13 @@ const FoodScreen: React.FC<IProps> = () => {
 
       <View style={styles.popularBurger}>
             <View style={styles.viewTitle}>
-                <Text style={styles.txtTitle}>Popular Burger</Text>
+                <Text style={styles.txtTitle}>Popular {detail.type}</Text>
             </View>
 
             <FlatList
-            key={'#'}
+                key={'#'}
                 nestedScrollEnabled
-                data={FoodData}
+                data={foodData}
                 numColumns={2}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
@@ -155,37 +131,38 @@ const FoodScreen: React.FC<IProps> = () => {
                         imageUri={item.imageUri}
                         name={item.name}
                         price={item.price}
+                        type={item.type}
                         restaurantName={item.restaurantName}
+                        retaurantId={item.restaurantId}
                         onPressAdd={() => {
                             CartStore.addItem({...item}, 1);
                             console.log(CartStore)
                         }}
                     />
                 )}
-                contentContainerStyle={{flex: 1, width: layout.width, gap: 10, alignItems: 'center',}}
+                contentContainerStyle={{height: 'auto', width: layout.width, gap: 10, alignItems: 'center', paddingBottom: 20,}}
                 columnWrapperStyle={{gap: 20}}
             />
 
       </View>
 
-      <View style={styles.popularBurger}>
+      <View style={styles.viewOpenRestaurant}>
             <View style={styles.viewTitle}>
                 <Text style={styles.txtTitle}>Open Restaurants</Text>
             </View>
 
             <FlatList
                 nestedScrollEnabled
-                data={RestaurantData}
+                data={restaurantData}
                 scrollEnabled={false}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
                     <RestaurantCard
+                        id={item.id}
                         description={item.description}
                         imageUri={item.imageUri}
                         name={item.name}
                         rating={item.rating}
-                        shipping={item.shipping}
-                        time={item.time}
                     />
                 )}
                 contentContainerStyle={{alignItems: 'center', width: '100%',}}

@@ -38,7 +38,7 @@ const slides: SlideData[] = [
   ];
 
   const renderSlide = ({item}: {item: SlideData}) => {
-    console.log('log', item)
+    // console.log('log', item)
     return (
       <View style={styles.slideContainer}>
         <Image source={item?.image} style={styles.image} />

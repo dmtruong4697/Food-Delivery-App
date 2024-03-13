@@ -102,7 +102,6 @@ const MenuData: MenuDataType[] = [
                 iconUri: require('../../../assets/icon/menu/cart.png'),
                 onPress: (() => {
                     console.log("log out");
-                    logout();
                 }),
             },  
         ]
@@ -153,7 +152,7 @@ const MenuProfileScreen: FC = () => {
       <View style={styles.viewInfo}>
         <Image style={styles.imgAvatar} source={require('../../../assets/image/avatar.png')}/>
         <View style={styles.viewText}>
-            <Text style={styles.txtName}>Septa</Text>
+            <Text style={styles.txtName}>{UserStore.getCurrentUser().displayName}</Text>
             <Text style={styles.txtStatus}>I love fast food</Text>
         </View>
       </View>
@@ -168,7 +167,7 @@ const MenuProfileScreen: FC = () => {
                            {
                             item.list.map((item1: ListData) => {
                                 return (
-                                    <MenuItem iconUri={item1.iconUri} name={item1.name} key={item1.id} onPress={item1.onPress}/>
+                                    <MenuItem iconUri={item1.iconUri} name={item1.name} key={item1.id} onPress={() => {logout(navigation)}}/>
                                 )
                             }) 
                            }

@@ -1,24 +1,34 @@
 import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, ScrollView, ImageSourcePropType } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styles } from './styles'
-import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation, useRoute } from '@react-navigation/native'
 import Modal from "react-native-modal";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import FoodDetailCard from '../../components/foodDetailCard'
 import { CartStore } from '../../mobx/CartStore';
+import { getFoodData, searchFoodByType } from '../../firebase/services/FoodService';
 
-type DishItemType = {
+type RestaurantType = {
     id: string;
-    imageUri: ImageSourcePropType;
     name: string;
+    description: string,
+    imageUri: string;
+    rating: number;
+}
+
+type FoodType = {
+    id: string;
+    type: string,
+    name: string;
+    imageUri: string;
     restaurantName: string;
+    restaurantId: string,
     price: number;
 }
 
 type DishType = {
     id: string;
     name: string;
-    list: DishItemType[];
 }
 
 type FilterDataType = {
@@ -36,98 +46,26 @@ const DishTypeData: DishType[] = [
     {
         id: '1',
         name: 'Burger',
-        list: [
-            {
-                id: '1',
-                imageUri: require('../../../assets/food/burger1.png'),
-                name: 'Burger Bistro nnn',
-                restaurantName: 'Rose Garden',
-                price: 33,
-            },
-            {
-                id: '2',
-                imageUri: require('../../../assets/food/burger1.png'),
-                name: 'Smokin Burger',
-                restaurantName: 'Rose Garden',
-                price: 11,
-            },
-            {
-                id: '3',
-                imageUri: require('../../../assets/food/burger1.png'),
-                name: 'Burger Bistro',
-                restaurantName: 'Rose Garden',
-                price: 22,
-            },
-            {
-                id: '4',
-                imageUri: require('../../../assets/food/burger1.png'),
-                name: 'Smokin Burger',
-                restaurantName: 'Rose Garden',
-                price: 55,
-            },
-        ],
     },
     {
         id: '2',
         name: 'Sandwich',
-        list: [
-            {
-                id: '1',
-                imageUri: require('../../../assets/food/pizza.png'),
-                name: 'Bistro',
-                restaurantName: 'Rose Garden',
-                price: 44,
-            },
-            {
-                id: '2',
-                imageUri: require('../../../assets/food/burger1.png'),
-                name: 'Smokin Burger',
-                restaurantName: 'Rose Garden',
-                price: 66,
-            },
-        ],
     },
     {
         id: '3',
         name: 'Rice',
-        list: [
-            {
-                id: '1',
-                imageUri: require('../../../assets/food/pizza.png'),
-                name: 'Bistro',
-                restaurantName: 'Rose Garden',
-                price: 77,
-            },
-            {
-                id: '2',
-                imageUri: require('../../../assets/food/burger1.png'),
-                name: 'Smokin Burger',
-                restaurantName: 'Rose Garden',
-                price: 88,
-            },
-            {
-                id: '3',
-                imageUri: require('../../../assets/food/pizza.png'),
-                name: 'Burger Bistro',
-                restaurantName: 'Rose Garden',
-                price: 99,
-            },
-        ],
     },
     {
         id: '4',
         name: 'Chicken',
-        list: [],
     },
     {
         id: '5',
-        name: 'Rice',
-        list: [],
+        name: 'Pizza',
     },
     {
         id: '6',
         name: 'Chicken',
-        list: [],
     },
 ]
 
@@ -183,6 +121,17 @@ interface IProps {}
 
 const RestaurantDetailScreen: React.FC<IProps>  = () => {
 
+    const route = useRoute();
+    const {detail} = route.params as {
+        detail: {
+            id: string;
+            name: string;
+            description: string,
+            imageUri: string;
+            rating: number;
+        },
+    };
+
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [dishIndex, setDishIndex] = useState(1);
     const [isShowModal, setIsShowModal] = useState(false);
@@ -190,6 +139,30 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
         width: 0,
         height: 0,
       });
+
+      const [foodData, setFoodData] = useState<FoodType[]>([]);
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await searchFoodByType(DishTypeData[0].name);
+            setFoodData(data);
+          } catch (error) {
+            console.error('Error fetching food data:', error);
+          }
+        };
+    
+        fetchData();
+      }, []);
+
+      const fetchData = async (type: string) => {
+        try {
+          const data = await searchFoodByType(type);
+          setFoodData(data);
+        } catch (error) {
+          console.error('Error fetching food data:', error);
+        }
+      };
+
 
   return (
     <ScrollView 
@@ -217,17 +190,17 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
       </View>
 
       <View style={styles.viewCover}>
-        <Image style={styles.imgCover} source={require('../../../assets/image/chicken.png')}/>
+        <Image style={styles.imgCover} source={{uri: detail.imageUri}}/>
       </View>
 
         <View style={styles.viewContent}>
-            <Text style={styles.txtName}>Spicy restaurant</Text>
-            <Text style={styles.txtDescription}>Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</Text>
+            <Text style={styles.txtName}>{detail.name}</Text>
+            <Text style={styles.txtDescription}>{detail.description}</Text>
 
             <View style={styles.viewInfo}>
                 <View style={styles.viewInfoItem}>
                     <Image style={styles.imgRating} source={require('../../../assets/icon/star2.png')}/>
-                    <Text style={styles.txtRating}>4.7</Text>
+                    <Text style={styles.txtRating}>{detail.rating}</Text>
                 </View>
 
                 <View style={styles.viewInfoItem}>
@@ -255,7 +228,10 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
                             borderWidth: (Number(item.id) === dishIndex)? 0:2,
                             borderColor: (Number(item.id) === dishIndex)? null:'#EDEDED',
                         }]}
-                        onPress={() => {setDishIndex(item.id)}}
+                        onPress={() => {
+                            setDishIndex(Number(item.id));
+                            fetchData(item.name);
+                        }}
                     >
                         <Text style={[styles.txtButtonDish, {color: (Number(item.id) == dishIndex)? '#FFFFFF':'#181C2E'}]}>{item.name}</Text>
                     </TouchableOpacity>
@@ -272,8 +248,8 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
             <FlatList
                 // key={dishIndex.toString()}
                 //nestedScrollEnabled
-                data={DishTypeData[dishIndex-1].list}
-                extraData={(dishIndex)}
+                data={foodData}
+                extraData={(foodData)}
                 numColumns={2}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
@@ -282,9 +258,11 @@ const RestaurantDetailScreen: React.FC<IProps>  = () => {
                         imageUri={item.imageUri}
                         name={item.name}
                         price={item.price}
+                        type={item.type}
                         restaurantName={item.restaurantName}
+                        retaurantId={item.restaurantId}
                         onPressAdd={() => {
-                            CartStore.addItem({...item, quantity: 1}, 1);
+                            CartStore.addItem({...item}, 1);
                             console.log(CartStore)
                         }}
                     />

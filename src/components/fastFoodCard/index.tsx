@@ -10,9 +10,11 @@ interface IProps {
     imageUri: string;
     restaurantName: string;
     price: number;
+    type: string,
+    restaurantId: string,
 }
 
-const FastFoodCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantName}) => {
+const FastFoodCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantName, type, restaurantId}) => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -20,7 +22,17 @@ const FastFoodCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantNa
     <View style={styles.viewShadow}>
     <TouchableOpacity 
       style={styles.viewContainer}
-      onPress={() => {navigation.navigate('Food')}}
+      onPress={() => {navigation.navigate('FoodDetail', 
+      {
+          detail: {
+              id: id,
+              imageUri: imageUri,
+              name: name,
+              price: price,
+              type: type,
+              restaurantName: restaurantName,
+          },
+      })}}
     >
       <Image style={styles.imgImage} source={{uri: imageUri}}/>
 

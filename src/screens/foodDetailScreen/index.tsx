@@ -42,10 +42,12 @@ const FoodDetailScreen: React.FC<IProps> = () => {
     const {detail} = route.params as {
         detail: {
             id: string,
-            imageUri: ImageSourcePropType,
+            imageUri: string,
             name: string,
+            type: string,
             price: number,
             restaurantName: string,
+            restaurantId: string,
         },
     };
 
@@ -88,7 +90,14 @@ const FoodDetailScreen: React.FC<IProps> = () => {
 
       <TouchableOpacity 
         style={styles.btnRestaurant}
-        onPress={() => {navigation.navigate('RestaurantDetail')}}
+        onPress={() => {navigation.navigate('RestaurantDetail',{
+            detail: {
+                id: '1',
+                name: 'name',
+                description: 'description',
+                imageUri: '',
+                rating: 3.4,
+            }})}}
       >
         <Image style={styles.imgRestaurantButton} source={require('../../../assets/food/burger.png')}/>
         <Text style={styles.txtRestaurantButton}>{detail.restaurantName}</Text>
@@ -165,7 +174,13 @@ const FoodDetailScreen: React.FC<IProps> = () => {
                 </View>
             </View>
 
-            <Button onPress={() => {CartStore.addItem(detail, quantity)}} content={'ADD TO CART'}/>
+            <Button 
+                onPress={() => {
+                    CartStore.addItem(detail, quantity);
+                    setIsShowModal(false);
+                }} 
+                content={'ADD TO CART'}
+            />
         </Modal>
 
     </ScrollView>

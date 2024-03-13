@@ -34,6 +34,7 @@ type FoodType = {
     name: string;
     imageUri: string;
     restaurantName: string;
+    restaurantId: string,
     price: number;
 }
 
@@ -97,41 +98,24 @@ const OpenRestaurantData: RestaurantType[] = [
     },
 ]
 
-let PopularFastFoodData: FoodType[] = [
-    {
-        id: '1',
-        name: 'European Pizza',
-        type: 'Pizza',
-        restaurantName: 'Peppe Pizzeria',
-        imageUri: "",
-        price: 100,
-    },
-    {
-        id: '2',
-        name: 'European Pizza',
-        type: 'Burger',
-        restaurantName: 'Peppe Pizzeria',
-        imageUri: "",
-        price: 100,
-    },
-    {
-        id: '3',
-        name: 'European Pizza',
-        type: 'Pizza',
-        restaurantName: 'Peppe Pizzeria',
-        imageUri: "",
-        price: 100,
-    },
-]
-
 const HomeScreen: FC = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [isShowModal, setIsShowModal] = useState(false);
 
+    const [foodData, setFoodData] = useState<FoodType[]>([]);
+
     useEffect(() => {
-        const data = getFoodData();
-        PopularFastFoodData = data;
+      const fetchData = async () => {
+        try {
+          const data = await getFoodData();
+          setFoodData(data);
+        } catch (error) {
+          console.error('Error fetching food data:', error);
+        }
+      };
+  
+      fetchData();
     }, []);
 
   return (
@@ -214,7 +198,11 @@ const HomeScreen: FC = () => {
                         id={item.id}
                         imageUri={item.imageUri}
                         name={item.name}
-                        onPress={item.onPress}
+                        onPress={() => {navigation.navigate('Food', {
+                            detail: {
+                                type: item.name,
+                            },
+                        })}}
                     />
                 )}
                 contentContainerStyle={{height: 70, alignItems: 'center',}}
@@ -264,7 +252,7 @@ const HomeScreen: FC = () => {
 
             <FlatList
                 nestedScrollEnabled
-                data={PopularFastFoodData}
+                data={foodData}
                 horizontal={true}
                 // keyExtractor={item => item.id}
                 renderItem={({item}: {item: FoodType}) => (
@@ -274,6 +262,8 @@ const HomeScreen: FC = () => {
                         name={item.name}
                         price={item.price}
                         restaurantName={item.restaurantName}
+                        restaurantId={item.restaurantId}
+                        type={item.type}
                     />
                 )}
                 contentContainerStyle={{height: 160, alignItems: 'center', gap: 10,}}

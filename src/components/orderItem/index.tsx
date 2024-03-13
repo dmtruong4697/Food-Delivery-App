@@ -3,19 +3,41 @@ import React from 'react'
 import { styles } from './styles'
 
 interface IProps {
-  type: string;
-  status: string;
-  imageUri: ImageSourcePropType;
+  id: string;
   name: string;
-  price: string;
-  completeTime: string;
+  type: string;
+  restaurantName: string;
+  restaurantId: string;
+  imageUri: string;
+  price: number;
   quantity: number;
-  code: string;
+  status: string;
   onPressTrack: () => void;
   onPressCancel: () => void;
 }
 
-const OrderItem: React.FC<IProps> = ({type, code, completeTime, imageUri, name, onPressCancel, onPressTrack, price, quantity, status}) => {
+type OrderItem = {
+  id: string;
+  name: string;
+  type: string;
+  restaurantName: string;
+  restaurantId: string;
+  imageUri: string;
+  price: number;
+  quantity: number;
+}
+
+const OrderItem: React.FC<IProps> = ({
+  type, 
+  imageUri, 
+  name, 
+  onPressCancel, 
+  onPressTrack, 
+  price, quantity, 
+  id, 
+  restaurantId, 
+  restaurantName, 
+  status}) => {
 
   return (
     <View style={styles.viewContainer}>
@@ -30,19 +52,18 @@ const OrderItem: React.FC<IProps> = ({type, code, completeTime, imageUri, name, 
       </View>
 
       <View style={styles.viewContent}>
-        <Image style={styles.imgImage} source={imageUri}/>
+        <Image style={styles.imgImage} source={{uri: imageUri}}/>
 
         <View style={styles.viewInfo}>
             <Text style={styles.txtName}>{name}</Text>
-            <View style={{flexDirection: 'row', padding: 5,}}>
-                <Text style={styles.txtName}>{price} </Text>
-                {(status != "Ongoing") && <Text style={styles.txtQuantity}>| {completeTime} •</Text>}
-                <Text style={styles.txtQuantity}> {quantity} Item
-                </Text>
+            <View style={{flexDirection: 'row', padding: 5, alignItems: 'center',}}>
+                <Text style={styles.txtName}>${price*quantity} </Text>
+                {(status != "Ongoing") && <Text style={styles.txtQuantity}>| {'complete time'} •</Text>}
+                <Text style={styles.txtQuantity}> {quantity} Item</Text>
             </View>
         </View>
 
-        <Text style={styles.txtCode}>#{code}</Text>
+        <Text style={styles.txtCode}>#{"code"}</Text>
       </View>
 
       {(status == 'Ongoing')?

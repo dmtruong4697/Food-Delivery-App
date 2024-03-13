@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { FC, useState } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { styles } from './styles'
@@ -8,6 +8,7 @@ import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../../firebase/config'
 import { UserStore } from '../../mobx/UserStore'
 import { getDatabase, ref, set } from '@firebase/database'
+import { signIn } from '../../firebase/services/AuthService'
 
 type User = {
     uid: string;
@@ -22,43 +23,16 @@ type User = {
 
 const SignInScreen: FC = () => {
 
-    const app = initializeApp(firebaseConfig);
-
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
     const [isShowPassword, setIsShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const signIn = () => {
-        const database = getDatabase(app);
-        const auth = getAuth(app);
-            signInWithEmailAndPassword(auth, email, password)
-            .then(async(userCredential) => {
-                // Signed in 
-                // const user = userCredential.user;
-                const user: User = {
-                    uid: userCredential.user.uid,
-                    userEmail: userCredential.user.email,
-                    phoneNumber: userCredential.user.phoneNumber,
-                    photoURL: userCredential.user.photoURL,
-                    displayName: userCredential.user.displayName,
-                    token: userCredential.user.stsTokenManager.accessToken,
-                    expirationTime: userCredential.user.stsTokenManager.expirationTime,
-                    refreshToken: userCredential.user.stsTokenManager.refreshToken,
-                }
-
-                await set(ref(database, 'activeUser/' + user.uid), user);
-
-                UserStore.setCurrentUser(user);
-                console.log(user);
-                navigation.navigate('Home');
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-            });
+    const fetchSignIn = async() => {
+        setIsLoading(true);
+        const user = await signIn(navigation, email, password);
+        setIsLoading(false);
     }
 
   return (
@@ -132,7 +106,8 @@ const SignInScreen: FC = () => {
             style={styles.signInButton}
             onPress={() => {
                 // navigation.navigate('Home')
-                signIn();
+                // signIn(navigation, email, password);
+                fetchSignIn();
             }}
         >
             <Text style={{fontSize: 16, fontWeight: '700', color: '#FFFFFF'}}
@@ -158,6 +133,13 @@ const SignInScreen: FC = () => {
         </TouchableOpacity>
 
       </View>
+
+      {(isLoading) && 
+        <View style={styles.viewLoading}>
+            {/* <Text style={styles.txtLoading}>Loading...</Text> */}
+            <ActivityIndicator color={'#E53935'} size={100}/>
+        </View>
+      }
 
     </View>
   )

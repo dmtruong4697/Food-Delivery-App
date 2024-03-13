@@ -7,13 +7,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 interface IProps {
     id: string;
     name: string;
+    type: string;
     imageUri: string;
     restaurantName: string;
     price: number;
+    retaurantId: string,
     onPressAdd: () => void;
 }
 
-const FoodDetailCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantName, onPressAdd}) => {
+const FoodDetailCard: React.FC<IProps> = ({id, imageUri, name, price, restaurantName, onPressAdd, type, retaurantId}) => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -27,13 +29,15 @@ const FoodDetailCard: React.FC<IProps> = ({id, imageUri, name, price, restaurant
                 imageUri: imageUri,
                 name: name,
                 price: price,
+                type: type,
                 restaurantName: restaurantName,
+                restaurantId: retaurantId,
             },
         })}}
     >
         
         <View style={styles.imgImage}>
-            <Image style={styles.imgImage} source={imageUri}/>
+            <Image style={styles.imgImage} source={{uri: imageUri}}/>
         </View>
 
         <View style={styles.viewContentShadow}>

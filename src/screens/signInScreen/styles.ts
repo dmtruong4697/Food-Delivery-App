@@ -3,12 +3,13 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#FFFFFF',
         height: '100%',
     },
 
     title1: {
-        marginTop: 20,
+        marginTop: 0,
         width: '90%',
     },
 
@@ -125,4 +126,18 @@ export const styles = StyleSheet.create({
         marginTop: 30, 
         marginBottom: 30,
     },
+
+    viewLoading: {
+        // height: 100,
+        // width: 100,
+        // backgroundColor: 'pink',
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    txtLoading: {
+        fontSize: 30,
+        fontWeight: '700',
+    }
 })

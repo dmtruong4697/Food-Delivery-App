@@ -1,5 +1,5 @@
 import { FlatList, Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchStore } from '../../mobx/SearchStore'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { observer } from 'mobx-react'
@@ -7,6 +7,8 @@ import { styles } from './styles'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import FastFoodCard from '../../components/fastFoodCard'
 import SuggestedRestaurantCard from '../../components/suggestedRestaurantCard'
+import { getFoodData } from '../../firebase/services/FoodService'
+import { getRestaurantData } from '../../firebase/services/RestaurantService'
 
 type RecentKeywordType = {
     id: string;
@@ -21,15 +23,18 @@ interface IRecentKeyword {
 type RestaurantType = {
     id: string;
     name: string;
-    imageUri: ImageSourcePropType;
+    description: string,
+    imageUri: string;
     rating: number;
 }
 
 type FoodType = {
     id: string;
+    type: string,
     name: string;
-    imageUri: ImageSourcePropType;
+    imageUri: string;
     restaurantName: string;
+    restaurantId: string,
     price: number;
 }
 
@@ -45,51 +50,6 @@ const RecentKeywordData: RecentKeywordType[] = [
     {
         id: '3',
         content: "Pizza",
-    },
-]
-
-const SuggestedRestaurantData: RestaurantType[] = [
-    {
-        id: '1',
-        imageUri: require('../../../assets/food/rice.png'),
-        name: 'Pansi Restaurant',
-        rating: 4.7,
-    },
-    {
-        id: '2',
-        imageUri: require('../../../assets/food/rice.png'),
-        name: 'American Spicy Burger Shop',
-        rating: 4.3,
-    },
-    {
-        id: '3',
-        imageUri: require('../../../assets/food/rice.png'),
-        name: 'Cafenio Coffee Club',
-        rating: 4.0,
-    },
-]
-
-const PopularFastFoodData: FoodType[] = [
-    {
-        id: '1',
-        name: 'European Pizza',
-        restaurantName: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png'),
-        price: 100,
-    },
-    {
-        id: '2',
-        name: 'European Pizza',
-        restaurantName: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png'),
-        price: 100,
-    },
-    {
-        id: '3',
-        name: 'European Pizza',
-        restaurantName: 'Peppe Pizzeria',
-        imageUri: require('../../../assets/food/pizza.png'),
-        price: 100,
     },
 ]
 
@@ -111,6 +71,34 @@ const SearchScreen: React.FC<IProps>  = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [searchText, setSearchText] = useState("");
+
+    const [foodData, setFoodData] = useState<FoodType[]>([]);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await getFoodData();
+          setFoodData(data);
+        } catch (error) {
+          console.error('Error fetching food data:', error);
+        }
+      };
+  
+      fetchData();
+    }, []);
+
+    const [restaurantData, setRestaurantData] = useState<RestaurantType[]>([]);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await getRestaurantData();
+          setRestaurantData(data);
+        } catch (error) {
+          console.error('Error fetching restaurant data:', error);
+        }
+      };
+  
+      fetchData();
+    }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -220,7 +208,7 @@ const SearchScreen: React.FC<IProps>  = () => {
         <FlatList
             nestedScrollEnabled
             //scrollEnabled={false}
-            data={SuggestedRestaurantData}
+            data={restaurantData}
             keyExtractor={item => item.id}
             renderItem={({item}) => (
                 <SuggestedRestaurantCard
@@ -228,6 +216,7 @@ const SearchScreen: React.FC<IProps>  = () => {
                     imageUri={item.imageUri}
                     name={item.name}
                     rating={item.rating}
+                    description={item.description}
                 />
             )}
             contentContainerStyle={{height: 'auto', width: '100%',}}
@@ -250,7 +239,7 @@ const SearchScreen: React.FC<IProps>  = () => {
 
             <FlatList
                 nestedScrollEnabled
-                data={PopularFastFoodData}
+                data={foodData}
                 horizontal={true}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
@@ -260,6 +249,8 @@ const SearchScreen: React.FC<IProps>  = () => {
                         name={item.name}
                         price={item.price}
                         restaurantName={item.restaurantName}
+                        restaurantId={item.restaurantId}
+                        type={item.type}
                     />
                 )}
                 contentContainerStyle={{height: 160, alignItems: 'center', gap: 10,}}

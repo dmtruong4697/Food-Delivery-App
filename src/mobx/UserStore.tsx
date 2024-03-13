@@ -37,7 +37,16 @@ class store {
     }
 
     logoutUser() {
-
+        this.user = {
+            uid: "",
+            userEmail: "",
+            phoneNumber: "",
+            photoURL: "",
+            displayName: "",
+            token: "",
+            expirationTime: 0,
+            refreshToken: "",
+        }
     }
     
 }

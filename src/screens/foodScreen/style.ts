@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
 
     popularBurger: {
         alignItems: 'center',
-        height: 445,
+        maxHeight: 445,
         width: '100%',
         //backgroundColor: 'pink',
         marginTop: 20,
@@ -106,5 +106,13 @@ export const styles = StyleSheet.create({
         fontWeight: '400', 
         color: '#32343E', 
         flex: 1,
+    },
+
+    viewOpenRestaurant: {
+        alignItems: 'center',
+        height: 'auto',
+        width: '100%',
+        //backgroundColor: 'pink',
+        marginTop: 20,
     },
 })

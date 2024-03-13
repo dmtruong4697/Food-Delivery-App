@@ -52,6 +52,7 @@ export const styles = StyleSheet.create({
         width: 74,
         height: 63,
         borderRadius: 7,
+        backgroundColor: 'gray',
     },
 
     viewInfo: {

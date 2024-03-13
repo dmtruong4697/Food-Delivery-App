@@ -1,10 +1,31 @@
 import { View, Text, TouchableOpacity, Image, useWindowDimensions, ScrollView, FlatList, ImageSourcePropType } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styles } from './styles'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import OrderItem from '../../components/orderItem';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { getOrderData } from '../../firebase/services/OrderService';
+
+type OrderItemType = {
+    id: string;
+    name: string;
+    type: string;
+    restaurantName: string;
+    restaurantId: string;
+    imageUri: string;
+    price: number;
+    quantity: number;
+}
+
+type Order = {
+    id: string,
+    userId: string,
+    createAt: string,
+    total: number,
+    orderList: OrderItemType[],
+    status: string,
+}
 
 type CartType = {
     id: string;
@@ -18,84 +39,42 @@ type CartType = {
     code: string;
 }
 
-const OngoingData: CartType[] = [
-    {
-        id: '1',
-        type: 'Food',
-        status: 'Ongoing',
-        completeTime: '29 JAN, 12:30',
-        imageUri: require('../../../assets/image/chicken.png'),
-        name: 'McDonnald',
-        price: '40.15',
-        quantity: 2,
-        code: '242432',
-    },
-    {
-        id: '2',
-        type: 'Food',
-        status: 'Ongoing',
-        completeTime: '29 JAN, 12:30',
-        imageUri: require('../../../assets/image/chicken.png'),
-        name: 'Pizza Hut',
-        price: '35.25',
-        quantity: 1,
-        code: '162432',
-    },
-    {
-        id: '3',
-        type: 'Drink',
-        status: 'Ongoing',
-        completeTime: '29 JAN, 12:30',
-        imageUri: require('../../../assets/image/chicken.png'),
-        name: 'Starbucks',
-        price: '10.20',
-        quantity: 1,
-        code: '240112',
-    },
-];
-
-const HistoryData: CartType[] = [
-    {
-        id: '1',
-        type: 'Food',
-        status: 'Completed',
-        completeTime: '29 JAN, 12:30',
-        imageUri: require('../../../assets/image/chicken.png'),
-        name: 'McDonnald',
-        price: '40.15',
-        quantity: 2,
-        code: '242432',
-    },
-    {
-        id: '2',
-        type: 'Food',
-        status: 'Completed',
-        completeTime: '29 JAN, 12:30',
-        imageUri: require('../../../assets/image/chicken.png'),
-        name: 'Pizza Hut',
-        price: '35.25',
-        quantity: 1,
-        code: '162432',
-    },
-    {
-        id: '3',
-        type: 'Drink',
-        status: 'Canceled',
-        completeTime: '29 JAN, 12:30',
-        imageUri: require('../../../assets/image/chicken.png'),
-        name: 'Starbucks',
-        price: '10.20',
-        quantity: 1,
-        code: '240112',
-    },
-];
-
 interface IProps {}
 
 const MyOrderScreen: React.FC<IProps>  = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const layout = useWindowDimensions();
+
+    function ongoingFilter(order: Order) {
+        return order.status == 'Ongoing';
+    }
+
+    function historyFilter(order: Order) {
+        return order.status != 'Ongoing';
+    }
+
+    const [orderData, setOrderData] = useState<Order[]>([]);
+    const [ongoingData, setOngoingData] = useState<OrderItem[]>([]);
+    const [historyData, setHistoryData] = useState<OrderItem[]>([]);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await getOrderData();
+          const onGoing = data.filter(ongoingFilter);
+          const history = data.filter(historyFilter);
+          setOngoingData(onGoing.flatMap(item => item.orderList));
+          setHistoryData(history.flatMap(item => item.orderList));
+        //   const orderItemData = data.flatMap(item => item.orderList);
+        //   console.log(orderItemData);
+          setOrderData(data);
+        } catch (error) {
+          console.error('Error fetching order data:', error);
+        }
+      };
+  
+      fetchData();
+    }, []);
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
@@ -107,20 +86,21 @@ const MyOrderScreen: React.FC<IProps>  = () => {
         <View style={{width: '100%', padding: 15, marginTop: 10, alignItems: 'center'}}>
                 <FlatList
                     nestedScrollEnabled
-                    data={OngoingData}
+                    data={ongoingData}
                     keyExtractor={item => item.id}
-                    renderItem={({item}: {item: CartType}) => (
+                    renderItem={({item}: {item: OrderItem}) => (
                         <OrderItem 
                             onPressTrack={() => {navigation.navigate('Tracker')}}
-                            code={item.code}
-                            completeTime={item.completeTime}
                             imageUri={item.imageUri}
                             name={item.name}
                             onPressCancel={() => {}}
                             price={item.price}
                             quantity={item.quantity}
-                            status={item.status}
+                            status={'Ongoing'}
                             type={item.type}
+                            id={item.id}
+                            restaurantId={item.restaurantId}
+                            restaurantName={item.restaurantName}
                         />
                     )}
                 />
@@ -131,20 +111,21 @@ const MyOrderScreen: React.FC<IProps>  = () => {
         <View style={{width: '100%', padding: 15, marginTop: 10, alignItems: 'center'}}>
                 <FlatList
                     nestedScrollEnabled
-                    data={HistoryData}
+                    data={historyData}
                     keyExtractor={item => item.id}
-                    renderItem={({item}) => (
+                    renderItem={({item}: {item: OrderItem}) => (
                         <OrderItem 
-                            onPressTrack={() => {}}
-                            code={item.code}
-                            completeTime={item.completeTime}
+                            onPressTrack={() => {navigation.navigate('Tracker')}}
                             imageUri={item.imageUri}
                             name={item.name}
                             onPressCancel={() => {}}
                             price={item.price}
                             quantity={item.quantity}
-                            status={item.status}
+                            status={'Completed'}
                             type={item.type}
+                            id={item.id}
+                            restaurantId={item.restaurantId}
+                            restaurantName={item.restaurantName}
                         />
                     )}
                 />
@@ -154,7 +135,7 @@ const MyOrderScreen: React.FC<IProps>  = () => {
     const renderScene = SceneMap({
         first: FirstRoute,
         second: SecondRoute,
-      });
+    });
 
   return (
     <View style={styles.viewContainer}>

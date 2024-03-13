@@ -3,20 +3,19 @@ import React from 'react'
 import { styles } from './styles'
 
 interface IProps {
-  imageUri: ImageSourcePropType,
-  name: string,
-  description: string,
-  rating: string,
-  shipping: string,
-  time: string,
+    id: string;
+    name: string;
+    description: string,
+    imageUri: string;
+    rating: number;
 }
 
-const RestaurantCard: React.FC<IProps> = ({description, imageUri, name, rating, shipping, time}) => {
+const RestaurantCard: React.FC<IProps> = ({description, imageUri, name, rating, id,}) => {
 
   return (
     <TouchableOpacity style={styles.viewContainer}>
       
-      <Image style={styles.imgCover} source={imageUri}/>
+      <Image style={styles.imgCover} source={{uri: imageUri}}/>
 
       <View style={styles.viewContent}>
         <Text style={styles.txtName}>{name}</Text>
@@ -30,12 +29,12 @@ const RestaurantCard: React.FC<IProps> = ({description, imageUri, name, rating, 
 
             <View style={styles.viewInfoItem}>
                 <Image style={styles.imgShipping} source={require('../../../assets/icon/shipping.png')}/>
-                <Text style={styles.txtShipping}>{shipping}</Text>
+                <Text style={styles.txtShipping}>Free</Text>
             </View>
 
             <View style={styles.viewInfoItem}>
                 <Image style={styles.imgTime} source={require('../../../assets/icon/time.png')}/>
-                <Text style={styles.txtTime}>{time}</Text>
+                <Text style={styles.txtTime}>20 min</Text>
             </View>
         </View>
       </View>

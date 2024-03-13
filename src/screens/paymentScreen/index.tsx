@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { CartStore } from '../../mobx/CartStore'
 import { observer } from 'mobx-react'
 import { CardStore } from '../../mobx/CardStore'
+import { addOrder } from '../../firebase/services/OrderService'
 
 type MethodItemType = {
     id: string;
@@ -81,6 +82,15 @@ const PaymentScreen: FC = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [methodIndex, setMethodIndex] = useState('1');
+
+    const handleAddOrder = async () => {
+        try {
+          const responce = await addOrder(navigation);
+          CartStore.resetCart();
+        } catch (error) {
+          console.error('Error adding order:', error);
+        }
+      };
 
     const CardItem = (item: Card) => {
 
@@ -199,7 +209,7 @@ const PaymentScreen: FC = () => {
             <Text style={styles.txtPrice}> ${CartStore.total}</Text>
         </View>
 
-        <Button content={'PAY & CONFIRM'} onPress={() => {navigation.navigate('PaymentSuccessfull')}}/>
+        <Button content={'PAY & CONFIRM'} onPress={handleAddOrder}/>
       </View>
 
     </View>
