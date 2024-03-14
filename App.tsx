@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -27,13 +27,15 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './src/navigator/MainNavigator';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
+import messaging, { firebase } from '@react-native-firebase/messaging';
+import installations from '@react-native-firebase/installations';
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
 function Section({children, title}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -61,9 +63,28 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
+  const getToken = async() => {
+    const token = await messaging().getToken();
+    const id = await installations().getId();
+    console.log("Token: ", token);
+    console.log("ID: ", id);
+  }
+
+  useEffect(() => {
+    requestUserPermission();
+    getToken();
+  },[])
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
     },
 
     txtName: {
-        fontSize: 20, 
+        fontSize: 18, 
         fontWeight: '400', 
         color: '#403F3E',
     },

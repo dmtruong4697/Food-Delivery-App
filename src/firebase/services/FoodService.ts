@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase, onValue, ref, } from "firebase/database";
 import { firebaseConfig } from "../config";
 import { ImageSourcePropType } from "react-native";
 
@@ -19,6 +19,8 @@ export async function getFoodData(): Promise<FoodType[]> {
       const database = getDatabase(app);
   
       const foodDataRef = ref(database, 'foods/');
+
+      
 
       return new Promise((resolve, reject) => {
         onValue(foodDataRef, (snapshot) => {

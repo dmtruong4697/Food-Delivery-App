@@ -25,7 +25,7 @@ export const logout = async (navigation: NavigationProp<any, any>): Promise<void
       navigation.navigate('SignIn');
 
       UserStore.logoutUser();
-      console.log(UserStore.getCurrentUser());
+      // console.log(UserStore.getCurrentUser());
 
     } catch (error) {
       throw error;

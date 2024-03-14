@@ -1,22 +1,36 @@
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { styles } from './styles';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface IProps {
     id: string;
-    imageUri: ImageSourcePropType;
     name: string;
-    price: number;
+    description: string,
+    imageUri: string;
     rating: number;
-    isFavorite: boolean;
 }
 
-const FoodCard: React.FC<IProps> = ({id, imageUri, name, price, rating, isFavorite}) => {
+const FoodCard: React.FC<IProps> = ({id, imageUri, name, rating, description}) => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   return (
-    <View style={styles.viewContainer}>
+    <TouchableOpacity 
+        style={styles.viewContainer}
+        onPress={() => {navigation.navigate('RestaurantDetail',{
+            detail: {
+              id: id,
+              name: name,
+              description: description,
+              imageUri: imageUri,
+              rating: rating,
+            },
+        })}}
+    >
         <View style={styles.viewImage}>
-            <Image style={styles.imgImage} source={imageUri}/>
+            <Image style={styles.imgImage} source={{uri: imageUri}}/>
         </View>
 
         <View style={styles.viewContent}>
@@ -24,7 +38,7 @@ const FoodCard: React.FC<IProps> = ({id, imageUri, name, price, rating, isFavori
             <Text style={styles.txtName}>{name}</Text>
 
             <View style={styles.viewInfo}>
-                <Text style={styles.txtPrice}>$ {price}</Text>
+                <Text style={styles.txtPrice}>$ 69</Text>
                 <View style={styles.viewRating}>
                     <Image style={styles.imgRating} source={require('../../../assets/icon/star.png')}/>
                     <Text style={styles.txtRating}>{rating}</Text>
@@ -48,7 +62,7 @@ const FoodCard: React.FC<IProps> = ({id, imageUri, name, price, rating, isFavori
         </View>
 
 
-    </View>
+    </TouchableOpacity>
   )
 }
 

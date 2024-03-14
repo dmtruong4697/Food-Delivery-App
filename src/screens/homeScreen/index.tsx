@@ -11,6 +11,7 @@ import FoodCard from '../../components/foodCard';
 import CategoryCard from '../../components/categoryCard';
 import { observer } from "mobx-react-lite"
 import { getFoodData } from '../../firebase/services/FoodService';
+import { getRestaurantData } from '../../firebase/services/RestaurantService';
 
 type CategoryType = {
     id: string;
@@ -20,12 +21,11 @@ type CategoryType = {
 }
 
 type RestaurantType = {
-    id: string,
-    imageUri: ImageSourcePropType,
-    name: string,
-    price: number,
-    rating: number,
-    isFavorite: boolean,
+    id: string;
+    name: string;
+    description: string,
+    imageUri: string;
+    rating: number;
 }
 
 type FoodType = {
@@ -71,45 +71,20 @@ const CategoriesData: CategoryType[] = [
     },
 ]
 
-const OpenRestaurantData: RestaurantType[] = [
-    {
-        id: '1',
-        imageUri: require('../../../assets/food/burger.png'),
-        name: "Cheese burgers",
-        price: 8.09,
-        rating: 4.2,
-        isFavorite: false,
-    },
-    {
-        id: '2',
-        imageUri: require('../../../assets/food/pizza.png'),
-        name: "Pizza",
-        price: 12.5,
-        rating: 4.6,
-        isFavorite: false,
-    },
-    {
-        id: '3',
-        imageUri: require('../../../assets/food/burger.png'),
-        name: "Cheese burgers",
-        price: 8.09,
-        rating: 4.2,
-        isFavorite: false,
-    },
-]
-
 const HomeScreen: FC = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [isShowModal, setIsShowModal] = useState(false);
 
     const [foodData, setFoodData] = useState<FoodType[]>([]);
-
+    const [restaurantData, setRestaurantData] = useState<RestaurantType[]>([]);
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const data = await getFoodData();
-          setFoodData(data);
+          const foodData = await getFoodData();
+          const restaurantData = await getRestaurantData();
+          setFoodData(foodData);
+          setRestaurantData(restaurantData);
         } catch (error) {
           console.error('Error fetching food data:', error);
         }
@@ -225,17 +200,16 @@ const HomeScreen: FC = () => {
 
             <FlatList
                 nestedScrollEnabled
-                data={OpenRestaurantData}
+                data={restaurantData}
                 horizontal={true}
                 // keyExtractor={item => item.id}
                 renderItem={({item}: {item: RestaurantType}) => (
                     <FoodCard
                         id={item.id}
                         imageUri={item.imageUri}
-                        isFavorite={item.isFavorite}
                         name={item.name}
-                        price={item.price}
                         rating={item.rating}
+                        description={item.description}
                     />
                 )}
                 contentContainerStyle={{height: 150,}}
