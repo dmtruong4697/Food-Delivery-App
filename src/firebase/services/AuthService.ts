@@ -4,6 +4,7 @@ import { getDatabase, ref, remove, set } from "@firebase/database";
 import { UserStore } from "../../mobx/UserStore";
 import { NavigationProp } from "@react-navigation/native";
 import { UserCredential, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { AuthStore } from "../../mobx/AuthStore";
 
 type User = {
     uid: string;
@@ -41,6 +42,9 @@ export async function signIn(
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const auth = getAuth(app);
+
+        AuthStore.setIsLoading(true);
+
         const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
 
         if (userCredential && userCredential.user) {
@@ -60,9 +64,17 @@ export async function signIn(
           navigation.navigate('Home');
     
           await set(ref(database, 'activeUser/' + user.uid), user);
+
+          AuthStore.setIsLoading(false);
+          AuthStore.setErrorMessage("");
           return user;
         }
-    } catch (error) {
+    }
+    
+    catch (error) {
+      console.log(error);
+      AuthStore.setErrorMessage("Error");
+      AuthStore.setIsLoading(false);
         throw error;
     }
     return {} as User;

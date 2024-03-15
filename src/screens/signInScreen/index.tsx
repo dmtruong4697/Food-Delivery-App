@@ -9,6 +9,10 @@ import { firebaseConfig } from '../../firebase/config'
 import { UserStore } from '../../mobx/UserStore'
 import { getDatabase, ref, set } from '@firebase/database'
 import { signIn } from '../../firebase/services/AuthService'
+import { getExample } from '../../services/api'
+import { observer } from 'mobx-react'
+import { AuthStore } from '../../mobx/AuthStore'
+import { Controller, useForm } from 'react-hook-form'
 
 type User = {
     uid: string;
@@ -26,14 +30,24 @@ const SignInScreen: FC = () => {
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    // const [email, setEmail] = useState("");
+    // const [password, setPassword] = useState("");
 
     const fetchSignIn = async() => {
-        setIsLoading(true);
-        const user = await signIn(navigation, email, password);
-        setIsLoading(false);
+        const user = await signIn(navigation, getValues().email, getValues().password);
     }
+
+    const {
+        register,
+        handleSubmit,
+        control,
+        getValues,
+        formState: { errors },
+      } = useForm();
+    
+      const onSubmit = ()=> {
+        console.log(getValues());
+      };
 
   return (
     <View style={styles.container}>
@@ -65,24 +79,47 @@ const SignInScreen: FC = () => {
         <View style={styles.inputField}>
             <Text style={styles.inputFieldTitle}>Email address</Text>
             <View style={styles.textInput}>
-                <TextInput 
-                    placeholder='email'
-                    placeholderTextColor={'#939393'}
-                    style={styles.viewInput}
-                    onChangeText={(text) => {setEmail(text)}}
+                <Controller
+                    control={control}
+                    render={({field: {onChange, onBlur, value}}) => (
+                        <TextInput  
+                        style={styles.viewInput}
+                        placeholder='email'
+                        placeholderTextColor={'#939393'}
+                        onBlur={onBlur}
+                        onChangeText={value => onChange(value)}
+                        value={value}
+                        />
+                    )}
+                    name='email'
+                    rules={{
+                        required: true,
+                    }}
                 />
             </View>
+            {errors.email && <Text>Email is required.</Text>}
         </View>
 
         <View style={styles.inputField}>
             <Text style={styles.inputFieldTitle}>Password</Text>
             <View style={styles.textInput}>
-                <TextInput 
-                    placeholder='password'
-                    placeholderTextColor={'#939393'}
-                    secureTextEntry={isShowPassword}
-                    style={styles.viewInput}
-                    onChangeText={(text) => {setPassword(text)}}
+                <Controller
+                    control={control}
+                    render={({field: {onChange, onBlur, value}}) => (
+                        <TextInput  
+                        placeholder='password'
+                        placeholderTextColor={'#939393'}
+                        secureTextEntry={isShowPassword}
+                        style={styles.viewInput}
+                        onBlur={onBlur}
+                        onChangeText={value => onChange(value)}
+                        value={value}
+                        />
+                    )}
+                    name='password'
+                    rules={{
+                        required: true,
+                    }}
                 />
                 <TouchableOpacity
                     onPress={() => {setIsShowPassword(!isShowPassword)}}
@@ -90,6 +127,7 @@ const SignInScreen: FC = () => {
                     <Image style={{width: 20, height: 16, marginLeft: 12, marginRight: 12,}} source={require('../../../assets/icon/showPassword.png')}/>
                 </TouchableOpacity>
             </View>
+            {errors.password && <Text>Password is required.</Text>}
         </View>
 
         <TouchableOpacity>
@@ -104,11 +142,10 @@ const SignInScreen: FC = () => {
         
         <TouchableOpacity
             style={styles.signInButton}
-            onPress={() => {
-                // navigation.navigate('Home')
-                // signIn(navigation, email, password);
+            onPress={handleSubmit(() => {
+                onSubmit();
                 fetchSignIn();
-            }}
+            })}
         >
             <Text style={{fontSize: 16, fontWeight: '700', color: '#FFFFFF'}}
             >SIGN IN</Text>
@@ -120,6 +157,7 @@ const SignInScreen: FC = () => {
 
         <TouchableOpacity
             style={[styles.socialButton, {backgroundColor: '#FBFBFB'}]}
+            onPress={() => {getExample()}}
         >
             <Image style={styles.mediaIcon} source={require('../../../assets/mediaIcon/facebook.png')}/>
             <Text style={styles.socialButtonText}>Connect with facebok</Text>
@@ -134,7 +172,7 @@ const SignInScreen: FC = () => {
 
       </View>
 
-      {(isLoading) && 
+      {(AuthStore.isLoading) && 
         <View style={styles.viewLoading}>
             {/* <Text style={styles.txtLoading}>Loading...</Text> */}
             <ActivityIndicator color={'#E53935'} size={100}/>
@@ -145,4 +183,4 @@ const SignInScreen: FC = () => {
   )
 }
 
-export default SignInScreen
+export default observer(SignInScreen)
