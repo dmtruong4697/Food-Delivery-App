@@ -19,6 +19,7 @@ import MenuProfileScreen from '../screens/menuProfileScreen';
 import TrackOrderScreen from '../screens/trackOrderScreen';
 import InboxScreen from '../screens/inboxScreen';
 import CallScreen from '../screens/callScreen';
+import TestScreen from '../screens/testScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -141,6 +142,13 @@ const MainNavigator = () => {
         <Stack.Screen 
             name="Call" 
             component={CallScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="Test" 
+            component={TestScreen}
             options={{
                 headerShown: false,
             }}  

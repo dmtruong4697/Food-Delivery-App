@@ -157,6 +157,7 @@ const HomeScreen: FC = () => {
                 <Text style={styles.txtCategoriesTitle}>All Categories</Text>
                 <TouchableOpacity
                     style={styles.btnSeeAll}
+                    onPress={() => {navigation.navigate('Test')}}
                 >
                     <Text style={styles.txtSeeAll}>See all</Text>
                     <Image style={styles.imgButtonSeeAll} source={require('../../../assets/icon/arrowRight.png')}/>
