@@ -24,12 +24,26 @@ class store {
         refreshToken: "",
     }
 
+    isEditLoading = false;
+
     constructor() {
         makeAutoObservable(this);
     }
 
     setCurrentUser(user: User) {
         this.user = user;
+    }
+
+    setCurrentUserName(name: string) {
+        this.user.displayName = name;
+    }
+
+    setCurrentUserAvatar(photoURL: string) {
+        this.user.photoURL = photoURL;
+    }
+
+    setIsEditLoading(bool: boolean) {
+        this.isEditLoading = bool;
     }
 
     getCurrentUser() {

@@ -20,6 +20,8 @@ import TrackOrderScreen from '../screens/trackOrderScreen';
 import InboxScreen from '../screens/inboxScreen';
 import CallScreen from '../screens/callScreen';
 import TestScreen from '../screens/testScreen';
+import SignUpScreen from '../screens/signUpScreen';
+import EditProfileScreen from '../screens/editProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +39,13 @@ const MainNavigator = () => {
         <Stack.Screen 
             name="SignIn" 
             component={SignInScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="SignUp" 
+            component={SignUpScreen}
             options={{
                 headerShown: false,
             }}  
@@ -142,6 +151,13 @@ const MainNavigator = () => {
         <Stack.Screen 
             name="Call" 
             component={CallScreen}
+            options={{
+                headerShown: false,
+            }}  
+        />
+        <Stack.Screen 
+            name="EditProfile" 
+            component={EditProfileScreen}
             options={{
                 headerShown: false,
             }}  

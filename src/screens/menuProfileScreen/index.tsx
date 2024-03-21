@@ -2,19 +2,20 @@ import { View, Text, TouchableOpacity, Image, ScrollView, FlatList, ImageProps, 
 import React, { FC, useState } from 'react'
 import { styles } from './styles'
 import MenuItem from '../../components/menuItem'
-import { ParamListBase, useNavigation } from '@react-navigation/native'
+import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../../firebase/config'
 import { getDatabase, ref, remove } from '@firebase/database'
 import { UserStore } from '../../mobx/UserStore'
 import { logout } from '../../firebase/services/AuthService'
+import { observer } from 'mobx-react'
 
 type ListData = {
     id: string;
     name: string;
     iconUri: ImageSourcePropType;
-    onPress: () => void;
+    onPress: (navigation: NavigationProp<any, any>) => void;
 }
 type MenuDataType = {
     id: string;
@@ -28,7 +29,9 @@ const MenuData: MenuDataType[] = [
                 id: '1',
                 name: 'Personal Info',
                 iconUri: require('../../../assets/icon/menu/personalInfo.png'),
-                onPress: () => {console.log("personal info")},
+                onPress: (navigation: NavigationProp<any, any>) => {
+                    navigation.navigate('EditProfile');
+                },
             },
             {
                 id: '2',
@@ -100,8 +103,8 @@ const MenuData: MenuDataType[] = [
                 id: '1',
                 name: 'Log Out',
                 iconUri: require('../../../assets/icon/menu/cart.png'),
-                onPress: (() => {
-                    console.log("log out");
+                onPress: ((navigation: NavigationProp<any, any>) => {
+                    logout(navigation);
                 }),
             },  
         ]
@@ -150,7 +153,7 @@ const MenuProfileScreen: FC = () => {
       </View>
 
       <View style={styles.viewInfo}>
-        <Image style={styles.imgAvatar} source={require('../../../assets/image/avatar.png')}/>
+        <Image style={styles.imgAvatar} source={{uri: UserStore.getCurrentUser().photoURL}}/>
         <View style={styles.viewText}>
             <Text style={styles.txtName}>{UserStore.getCurrentUser().displayName}</Text>
             <Text style={styles.txtStatus}>I love fast food</Text>
@@ -167,7 +170,7 @@ const MenuProfileScreen: FC = () => {
                            {
                             item.list.map((item1: ListData) => {
                                 return (
-                                    <MenuItem iconUri={item1.iconUri} name={item1.name} key={item1.id} onPress={() => {logout(navigation)}}/>
+                                    <MenuItem iconUri={item1.iconUri} name={item1.name} key={item1.id} onPress={() => item1.onPress(navigation)}/>
                                 )
                             }) 
                            }
@@ -180,4 +183,4 @@ const MenuProfileScreen: FC = () => {
   )
 }
 
-export default MenuProfileScreen
+export default observer(MenuProfileScreen)

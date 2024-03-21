@@ -8,34 +8,16 @@ import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../../firebase/config'
 import { UserStore } from '../../mobx/UserStore'
 import { getDatabase, ref, set } from '@firebase/database'
-import { signIn } from '../../firebase/services/AuthService'
+import { signIn, signUp } from '../../firebase/services/AuthService'
 import { getExample } from '../../services/api'
 import { observer } from 'mobx-react'
 import { AuthStore } from '../../mobx/AuthStore'
 import { Controller, useForm } from 'react-hook-form'
 
-type User = {
-    uid: string;
-    userEmail: string | null,
-    phoneNumber: string | null,
-    photoURL: string | null,
-    displayName: string | null,
-    token: string,
-    refreshToken: string,
-    expirationTime: number,
-}
-
-const SignInScreen: FC = () => {
+const SignUpScreen: FC = () => {
 
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [isShowPassword, setIsShowPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
-
-    const fetchSignIn = async() => {
-        const user = await signIn(navigation, getValues().email, getValues().password);
-    }
 
     const {
         register,
@@ -57,7 +39,7 @@ const SignInScreen: FC = () => {
         >
             <Text style={styles.txtTitle}>
                 Just {""}
-                <Text style={styles.txtTitle2}>Sign in</Text>
+                <Text style={styles.txtTitle2}>Sign up</Text>
                 ,we'll prepar your order
             </Text>
         </View>
@@ -69,11 +51,7 @@ const SignInScreen: FC = () => {
             >
                 <Text style={{fontSize: 16, fontWeight: '500', color: '#646982'}}>
                     If you don't have an account please {""}
-                    <TouchableOpacity
-                        onPress={() => {navigation.navigate('SignUp')}}
-                    >
-                        <Text style={{fontSize: 16, fontWeight: '500', color: '#F44336'}}>Sign up here</Text>
-                    </TouchableOpacity>
+                    <Text style={{fontSize: 16, fontWeight: '500', color: '#F44336'}}>Sign up here</Text>
                 </Text>
             </View>
       </View>
@@ -148,11 +126,11 @@ const SignInScreen: FC = () => {
             style={styles.signInButton}
             onPress={handleSubmit(() => {
                 onSubmit();
-                fetchSignIn();
+                signUp(navigation, getValues().email, getValues().password);
             })}
         >
             <Text style={{fontSize: 16, fontWeight: '700', color: '#FFFFFF'}}
-            >SIGN IN</Text>
+            >SIGN UP</Text>
         </TouchableOpacity>
 
         <Text 
@@ -175,16 +153,8 @@ const SignInScreen: FC = () => {
         </TouchableOpacity>
 
       </View>
-
-      {(AuthStore.isLoading) && 
-        <View style={styles.viewLoading}>
-            {/* <Text style={styles.txtLoading}>Loading...</Text> */}
-            <ActivityIndicator color={'#E53935'} size={100}/>
-        </View>
-      }
-
     </View>
   )
 }
 
-export default observer(SignInScreen)
+export default observer(SignUpScreen)
