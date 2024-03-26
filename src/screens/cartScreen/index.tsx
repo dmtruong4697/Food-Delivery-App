@@ -113,6 +113,7 @@ const CartScreen: FC = () => {
 <BottomSheet
         ref={bottomSheetRef}
         onChange={handleSheetChanges}
+        index={1}
         snapPoints={[50, 310]}
         backgroundStyle={{backgroundColor: '#F0F5FA'}}
         handleIndicatorStyle={{

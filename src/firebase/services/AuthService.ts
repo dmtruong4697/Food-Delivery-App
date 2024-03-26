@@ -16,6 +16,7 @@ type User = {
     token: string,
     refreshToken: string,
     expirationTime: number,
+    deviceToken: string,
 }
 
 export const logout = async (navigation: NavigationProp<any, any>): Promise<void> => {
@@ -58,6 +59,7 @@ export async function signIn(
             token: userCredential.user.stsTokenManager.accessToken || '',
             expirationTime: userCredential.user.stsTokenManager.expirationTime || 0,
             refreshToken: userCredential.user.stsTokenManager.refreshToken || '',
+            deviceToken: UserStore.deviceToken,
           };
     
           UserStore.setCurrentUser(user);

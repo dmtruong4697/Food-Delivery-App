@@ -26,6 +26,8 @@ class store {
 
     isEditLoading = false;
 
+    deviceToken = ''
+
     constructor() {
         makeAutoObservable(this);
     }
@@ -50,6 +52,10 @@ class store {
         return this.user;
     }
 
+    setDeviceToken(token: string) {
+        this.deviceToken = token;
+    }
+
     logoutUser() {
         this.user = {
             uid: "",
@@ -60,7 +66,8 @@ class store {
             token: "",
             expirationTime: 0,
             refreshToken: "",
-        }
+        };
+        this.deviceToken = '';
     }
     
 }

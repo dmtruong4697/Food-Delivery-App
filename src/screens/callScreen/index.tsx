@@ -82,6 +82,7 @@ const CallScreen: React.FC<IProps>  = () => {
       <BottomSheet
         ref={bottomSheetRef}
         onChange={handleSheetChanges}
+        index={1}
         snapPoints={[230, 350]}
         handleIndicatorStyle={{
           backgroundColor: '#FFFFFF',

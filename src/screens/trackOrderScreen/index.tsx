@@ -45,6 +45,7 @@ const TrackOrderScreen: React.FC<IProps>  = () => {
       <BottomSheet
         ref={bottomSheetRef}
         onChange={handleSheetChanges}
+        index={1}
         snapPoints={[130, 550]}
         handleIndicatorStyle={{
           backgroundColor: '#1A18170D',

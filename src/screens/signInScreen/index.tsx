@@ -1,5 +1,5 @@
-import { ActivityIndicator, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { FC, useState } from 'react'
+import { ActivityIndicator, Alert, Image, Linking, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { FC, useEffect, useState } from 'react'
 import { ParamListBase, useNavigation } from '@react-navigation/native'
 import { styles } from './styles'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -13,6 +13,9 @@ import { getExample } from '../../services/api'
 import { observer } from 'mobx-react'
 import { AuthStore } from '../../mobx/AuthStore'
 import { Controller, useForm } from 'react-hook-form'
+import remoteConfig from '@react-native-firebase/remote-config';
+import { CardStore } from '../../mobx/CardStore'
+import { VersionStore } from '../../mobx/VersionStore'
 
 type User = {
     uid: string;
@@ -33,6 +36,10 @@ const SignInScreen: FC = () => {
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
 
+    const awesomeNewFeature = remoteConfig().getValue('awesome_new_feature');
+    const version2 = remoteConfig().getValue('version2');
+    const newVersion = remoteConfig().getValue('newversion').asString();
+
     const fetchSignIn = async() => {
         const user = await signIn(navigation, getValues().email, getValues().password);
     }
@@ -49,8 +56,28 @@ const SignInScreen: FC = () => {
         console.log(getValues());
       };
 
+    const createTwoButtonAlert = () =>
+        Alert.alert('New Update Available', 'My Alert Msg', [
+        {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+        },
+        {text: 'Update', onPress: () => {
+            console.log('OK Pressed');
+            // VersionStore.setCurrentVersion(newVersion);
+            Linking.openURL("market://details?id=googoo.android.btgps");
+        }},
+    ]);
+
+    useEffect(() => {
+        if(newVersion != VersionStore.currentVersion) createTwoButtonAlert();
+    }, []);
+
   return (
     <View style={styles.container}>
+
+        <Text>result: {newVersion} || {VersionStore.currentVersion}</Text>
       
       <View style={styles.title1}>
         <View style={{width: 219, height: 72,}}

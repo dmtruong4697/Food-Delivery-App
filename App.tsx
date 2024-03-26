@@ -26,39 +26,13 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './src/navigator/MainNavigator';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import messaging, { firebase } from '@react-native-firebase/messaging';
 import installations from '@react-native-firebase/installations';
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import remoteConfig from '@react-native-firebase/remote-config';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { VersionStore } from './src/mobx/VersionStore';
+import {PermissionsAndroid} from 'react-native';
+import { UserStore } from './src/mobx/UserStore';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -76,18 +50,53 @@ function App(): React.JSX.Element {
 
   const getToken = async() => {
     const token = await messaging().getToken();
+    UserStore.setDeviceToken(token);
     const id = await installations().getId();
     console.log("Token: ", token);
     console.log("ID: ", id);
   }
 
+  const fetchConfig = async() => {
+    await remoteConfig()
+    .setDefaults({
+      awesome_new_feature: 'disabled',
+    });
+    // .then(() => remoteConfig().fetchAndActivate())
+    // .then(fetchedRemotely => {
+    //   if (fetchedRemotely) {
+    //     console.log('Configs were retrieved from the backend and activated.');
+    //   } else {
+    //     console.log(
+    //       'No configs were fetched from the backend, and the local configs were already activated',
+    //     );
+    //   }
+    // });
+
+    await remoteConfig().fetch(300);
+
+    await remoteConfig().fetchAndActivate()
+      .then(fetchedRemotely => {
+        if (fetchedRemotely) {
+          console.log('Configs were retrieved from the backend and activated.');
+          // const newVersion = remoteConfig().getValue('newversion').asString();
+        } else {
+          console.log(
+            'No configs were fetched from the backend, and the local configs were already activated',
+          );
+        }
+      })
+
+  }
+
   useEffect(() => {
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
     requestUserPermission();
     getToken();
+    fetchConfig();
   },[])
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{flex: 1,}}>
     <NavigationContainer>
       <MainNavigator/>
     </NavigationContainer>
