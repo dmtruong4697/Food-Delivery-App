@@ -33,6 +33,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { VersionStore } from './src/mobx/VersionStore';
 import {PermissionsAndroid} from 'react-native';
 import { UserStore } from './src/mobx/UserStore';
+import inAppMessaging from '@react-native-firebase/in-app-messaging';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -56,23 +57,13 @@ function App(): React.JSX.Element {
     console.log("ID: ", id);
   }
 
-  const fetchConfig = async() => {
-    await remoteConfig()
-    .setDefaults({
-      awesome_new_feature: 'disabled',
-    });
-    // .then(() => remoteConfig().fetchAndActivate())
-    // .then(fetchedRemotely => {
-    //   if (fetchedRemotely) {
-    //     console.log('Configs were retrieved from the backend and activated.');
-    //   } else {
-    //     console.log(
-    //       'No configs were fetched from the backend, and the local configs were already activated',
-    //     );
-    //   }
-    // });
+  const bootstrap = async() => {
+    await inAppMessaging().setMessagesDisplaySuppressed(true);
+  }
 
-    await remoteConfig().fetch(300);
+  const fetchConfig = async() => {
+
+    await remoteConfig().fetch(50);
 
     await remoteConfig().fetchAndActivate()
       .then(fetchedRemotely => {
@@ -93,6 +84,7 @@ function App(): React.JSX.Element {
     requestUserPermission();
     getToken();
     fetchConfig();
+    bootstrap();
   },[])
 
   return (

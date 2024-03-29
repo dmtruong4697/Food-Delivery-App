@@ -66,7 +66,7 @@ const SignInScreen: FC = () => {
         {text: 'Update', onPress: () => {
             console.log('OK Pressed');
             // VersionStore.setCurrentVersion(newVersion);
-            Linking.openURL("market://details?id=googoo.android.btgps");
+            Linking.openURL("market://details?id=com.google.android.youtube");
         }},
     ]);
 

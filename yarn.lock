@@ -2563,10 +2563,10 @@
   dependencies:
     invariant "^2.2.4"
 
-"@react-native-firebase/analytics@^19.1.0":
-  version "19.1.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/analytics/-/analytics-19.1.0.tgz"
-  integrity sha512-p6ZwpbYJRN6yCd1i0gjICyUbtxaVGINMiL4OxTJxpWaKZFGn5+qLe+p948Zww7Wnw4IiuZoUhM7K9YXOjqFYqw==
+"@react-native-firebase/analytics@^19.1.1":
+  version "19.1.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-19.1.1.tgz#d709f57bc0462c002e9abef62ed5958657c28f75"
+  integrity sha512-XvDBmQKokdhFqr0Os3LrNIdyYXKtKTVbZZ0fDJZ1uogEfFRn6VofPQMmkpowOoa7pbGC35HTelqdnPZl4/hGuw==
 
 "@react-native-firebase/app@^19.0.1":
   version "19.0.1"
@@ -2582,6 +2582,11 @@
   integrity sha512-7p/AMHm96sCgeERKTGn/PgO/16CUGSeAK3EFVUwr5kVBLfwragDPprUh1x7LaX/irbwbrZwlr2LEHpXNG/4j1g==
   dependencies:
     plist "^3.1.0"
+
+"@react-native-firebase/in-app-messaging@^19.1.1":
+  version "19.1.1"
+  resolved "https://registry.npmjs.org/@react-native-firebase/in-app-messaging/-/in-app-messaging-19.1.1.tgz"
+  integrity sha512-8f9GlWJepM4XASN6xm7uBTHO6R5Xs0Aos3FJ14TiFEYi43N+W4ti9RjT+hJEERTQdFd2ZkjigrWZVmM8J8drfw==
 
 "@react-native-firebase/installations@^19.0.1":
   version "19.0.1"
@@ -7913,7 +7918,7 @@ react-native-app-intro-slider@^4.0.4:
 
 react-native-gesture-handler@^2.15.0:
   version "2.15.0"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.15.0.tgz#f8e6c0451a7bdf065edb7b9be605480db402baa0"
+  resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.15.0.tgz"
   integrity sha512-cmMGW8k86o/xgVTBZZOPohvR5re4Vh65PUxH4HbBBJAYTog4aN4wTVTUlnoky01HuSN8/X4h3tI/K3XLPoDnsg==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
